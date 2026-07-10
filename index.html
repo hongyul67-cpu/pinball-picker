@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>구슬 낙하 뽑기 — 발표 순서 · 당번</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1e2440; --line:#2b3358;
+    --txt:#e8ecff; --muted:#9aa3c7; --accent:#5b8cff; --gold:#ffcb45; --pink:#ff5d8f;
+    --green:#37d39b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:radial-gradient(1200px 600px at 50% -10%,#1a2140,#0f1220 60%);
+    color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif;
+    display:flex;flex-direction:column;align-items:center;min-height:100%;
+  }
+  h1{font-size:20px;margin:16px 0 2px;letter-spacing:-.3px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center;padding:0 12px}
+  .wrap{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;justify-content:center;
+        width:100%;max-width:1040px;padding:0 12px 40px}
+  .stage{position:relative;background:linear-gradient(#141830,#10132a);
+         border:1px solid var(--line);border-radius:16px;overflow:hidden;
+         box-shadow:0 20px 60px rgba(0,0,0,.45);flex:0 0 auto}
+  canvas{display:block;touch-action:none}
+  .side{flex:1 1 300px;min-width:280px;max-width:380px;display:flex;flex-direction:column;gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .card h2{font-size:13px;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.3px}
+  textarea{width:100%;height:120px;resize:vertical;background:var(--panel2);color:var(--txt);
+           border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px;line-height:1.5}
+  textarea:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg button{flex:1;background:none;border:none;color:var(--muted);padding:8px 6px;font-size:13px;cursor:pointer}
+  .seg button.on{background:var(--accent);color:#fff}
+  input[type=number]{width:70px;background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+                     border-radius:8px;padding:7px 8px;font-size:14px}
+  label.mini{color:var(--muted);font-size:13px}
+  .btns{display:flex;gap:10px}
+  .btn{flex:1;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;transition:.15s}
+  .btn.go{background:linear-gradient(135deg,#5b8cff,#7a5cff);color:#fff}
+  .btn.go:hover{filter:brightness(1.08)}
+  .btn.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line);flex:0 0 auto;padding:13px 16px}
+  .btn:disabled{opacity:.5;cursor:default}
+  .quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .quick button{background:var(--panel2);border:1px solid var(--line);color:var(--muted);
+                border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer}
+  .quick button:hover{border-color:var(--accent);color:var(--txt)}
+  .slider{display:flex;align-items:center;gap:10px;margin:9px 0}
+  .slider label{width:70px;font-size:13px;color:var(--muted);flex:0 0 auto}
+  .slider input[type=range]{flex:1;accent-color:var(--accent);height:4px}
+  .slider .val{width:52px;text-align:right;font-size:12px;color:var(--txt);flex:0 0 auto}
+  .hintlite{font-weight:400;color:var(--muted);font-size:11px}
+  .result{max-height:340px;overflow:auto}
+  .result ol{margin:0;padding:0;list-style:none;counter-reset:r}
+  .result li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;margin-bottom:6px;
+             background:var(--panel2);font-size:15px}
+  .result li .rk{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+                 font-size:13px;font-weight:800;color:#0f1220;background:var(--muted);flex:0 0 auto}
+  .result li.win{background:linear-gradient(90deg,rgba(255,203,69,.18),transparent);border:1px solid var(--gold)}
+  .result li.win .rk{background:var(--gold)}
+  .result li.lose{background:linear-gradient(90deg,rgba(255,93,143,.16),transparent);border:1px solid var(--pink)}
+  .result li.lose .rk{background:var(--pink)}
+  .dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+  .empty{color:var(--muted);font-size:14px;text-align:center;padding:24px 0}
+  .banner{position:absolute;left:0;right:0;top:14px;text-align:center;pointer-events:none;
+          font-size:26px;font-weight:800;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.6);
+          opacity:0;transition:opacity .3s}
+  .banner.show{opacity:1}
+  .toolbar{position:absolute;top:10px;left:10px;font-size:12px;color:var(--muted);
+           background:rgba(0,0,0,.35);border-radius:8px;padding:4px 8px}
+</style>
+</head>
+<body>
+  <h1>🎱 구슬 낙하 뽑기</h1>
+  <div class="sub">공들이 못에 부딪히고 서로 밀치며 떨어져요. 도착 순서로 발표 순번·당번을 정합니다. 눈으로 직접 지켜보세요!</div>
+
+  <div class="wrap">
+    <div class="stage">
+      <div class="toolbar" id="toolbar">대기 중</div>
+      <div class="banner" id="banner"></div>
+      <canvas id="cv" width="520" height="780"></canvas>
+    </div>
+
+    <div class="side">
+      <div class="card">
+        <h2>참가자</h2>
+        <div class="seg" id="inputMode" style="margin-bottom:10px">
+          <button data-m="names" class="on">이름 입력</button>
+          <button data-m="range">번호 1~N</button>
+        </div>
+        <div id="namesBox">
+          <textarea id="names" placeholder="한 줄에 한 명씩 입력하세요&#10;예)&#10;김하나&#10;이두리&#10;박세라"></textarea>
+          <div class="quick">
+            <button data-n="5">5명</button>
+            <button data-n="10">10명</button>
+            <button data-n="15">15명</button>
+            <button data-n="예시">예시 채우기</button>
+          </div>
+        </div>
+        <div id="rangeBox" style="display:none">
+          <div class="row"><label class="mini">1번부터</label>
+            <input type="number" id="rangeN" value="20" min="2" max="60">
+            <label class="mini">번까지</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>당첨 기준</h2>
+        <div class="seg" id="pickMode">
+          <button data-p="order" class="on">전체 순서</button>
+          <button data-p="first">1등 당첨</button>
+          <button data-p="last">꼴등 당첨</button>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <label class="mini">몇 명 뽑기</label>
+          <input type="number" id="pickCount" value="1" min="1" max="10">
+          <label class="mini" id="pickHint">명 (당번·발표자)</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>물리 느낌 <span class="hintlite">(다음 시작부터 적용)</span></h2>
+        <div class="slider"><label>낙하 속도</label>
+          <input type="range" id="pG" min="800" max="2600" step="50" value="1500">
+          <span class="val" id="vG">보통</span></div>
+        <div class="slider"><label>통로 폭</label>
+          <input type="range" id="pC" min="70" max="180" step="5" value="100">
+          <span class="val" id="vC">보통</span></div>
+        <div class="slider"><label>튕김</label>
+          <input type="range" id="pB" min="40" max="130" step="5" value="100">
+          <span class="val" id="vB">보통</span></div>
+        <div class="slider"><label>못 촘촘함</label>
+          <input type="range" id="pP" min="1" max="5" step="1" value="3">
+          <span class="val" id="vP">보통</span></div>
+      </div>
+
+      <div class="btns">
+        <button class="btn go" id="startBtn">시작 ▶</button>
+        <button class="btn ghost" id="resetBtn">초기화</button>
+      </div>
+
+      <div class="card">
+        <h2>결과</h2>
+        <div class="result" id="result"><div class="empty">아직 결과가 없어요.</div></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+
+  // ---- layout ----
+  const wallPad = 34;
+  const funnelTopY = 560, funnelBotY = 686;
+  const centerX = W/2;
+  let chuteHalf = 34;          // 반칸 (반지름에 따라 재계산)
+  const finishY = 700;
+  const chuteBotY = 772;
+
+  const PALETTE = ['#5b8cff','#37d39b','#ffcb45','#ff5d8f','#7a5cff','#ff9f43',
+    '#4dd0e1','#e879f9','#a3e635','#fb7185','#38bdf8','#f472b6','#facc15','#34d399'];
+
+  let balls = [], segments = [], pegs = [];
+  let running = false, finishedOrder = [], raf = 0, settleTimer = 0;
+  let state = 'idle'; // idle | racing | done
+
+  // 물리 설정 (슬라이더로 조절, 시작 시 반영)
+  let cfgG = 1500, cfgChuteMul = 1, cfgPegGap = 54, cfgBounce = 1;
+
+  // ---- input handling ----
+  const $ = id => document.getElementById(id);
+  let inputMode = 'names', pickMode = 'order';
+
+  document.querySelectorAll('#inputMode button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#inputMode button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); inputMode=b.dataset.m;
+    $('namesBox').style.display = inputMode==='names'?'block':'none';
+    $('rangeBox').style.display = inputMode==='range'?'block':'none';
+  });
+  document.querySelectorAll('#pickMode button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#pickMode button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); pickMode=b.dataset.p;
+    $('pickCount').closest('.row').style.display = pickMode==='order'?'none':'flex';
+  });
+  document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>{
+    const n=b.dataset.n;
+    if(n==='예시'){ $('names').value='김하나\n이두리\n박세라\n최네오\n정오름\n한여섯'; return;}
+    const arr=[]; for(let i=1;i<=+n;i++) arr.push(i+'번');
+    $('names').value=arr.join('\n');
+  });
+
+  function getNames(){
+    if(inputMode==='range'){
+      const n=Math.max(2,Math.min(60,+$('rangeN').value||0));
+      return Array.from({length:n},(_,i)=>(i+1)+'번');
+    }
+    return $('names').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  }
+
+  // ---- build board ----
+  function buildBoard(r){
+    segments = [];
+    const S=(x1,y1,x2,y2)=>segments.push({x1,y1,x2,y2});
+    // 바깥 벽
+    S(wallPad, 60, wallPad, funnelTopY);
+    S(W-wallPad, 60, W-wallPad, funnelTopY);
+    // 깔때기
+    chuteHalf = Math.max(r*1.35*cfgChuteMul, 18);
+    const clx = centerX-chuteHalf, crx = centerX+chuteHalf;
+    S(wallPad, funnelTopY, clx, funnelBotY);
+    S(W-wallPad, funnelTopY, crx, funnelBotY);
+    // 배출구(단일 통로)
+    S(clx, funnelBotY, clx, chuteBotY);
+    S(crx, funnelBotY, crx, chuteBotY);
+
+    // 못(peg) 격자
+    pegs=[];
+    const pr=5, gap=cfgPegGap;
+    let row=0;
+    for(let y=150;y<=funnelTopY-30;y+=gap*0.85){
+      const off = (row%2)? gap/2:0;
+      for(let x=wallPad+34+off; x<=W-wallPad-30; x+=gap){
+        pegs.push({x,y,r:pr});
+      }
+      row++;
+    }
+  }
+
+  function radiusFor(n){
+    if(n<=8) return 16;
+    if(n<=14) return 13;
+    if(n<=22) return 11;
+    if(n<=34) return 9;
+    return 7.5;
+  }
+
+  function setup(){
+    const names=getNames();
+    if(names.length<2){ alert('참가자를 2명 이상 입력하세요.'); return null;}
+    // 슬라이더 값 반영
+    cfgG       = +$('pG').value;
+    cfgChuteMul= +$('pC').value/100;
+    cfgBounce  = +$('pB').value/100;
+    cfgPegGap  = 74 - (+$('pP').value)*7;   // 촘촘함 1~5 → 간격 67~39
+    const r=radiusFor(names.length);
+    buildBoard(r);
+    balls=[];
+    // 상단에 격자로 배치 (겹침 없이)
+    const cols=Math.max(1,Math.floor((W-2*wallPad-20)/(r*2+6)));
+    const gapx=(W-2*wallPad-20)/cols;
+    names.forEach((nm,i)=>{
+      const c=i%cols, rw=Math.floor(i/cols);
+      const x=wallPad+18+gapx*(c+0.5)+(Math.random()-0.5)*4;
+      const y=30 - rw*(r*2+8);
+      balls.push({
+        x,y,vx:(Math.random()-0.5)*20,vy:0,r,name:nm,
+        color:PALETTE[i%PALETTE.length], id:i, finished:false, rank:0, prevY:y
+      });
+    });
+    finishedOrder=[]; state='racing';
+    return true;
+  }
+
+  // ---- physics ----
+  const MAXV=1500;
+  function closestOnSeg(px,py,s){
+    const dx=s.x2-s.x1, dy=s.y2-s.y1;
+    const L2=dx*dx+dy*dy || 1e-6;
+    let t=((px-s.x1)*dx+(py-s.y1)*dy)/L2;
+    t=Math.max(0,Math.min(1,t));
+    return {x:s.x1+t*dx, y:s.y1+t*dy};
+  }
+
+  function step(dt){
+    for(const b of balls){
+      if(b.finished) continue;
+      b.vy += cfgG*dt;
+      // 속도 제한
+      const sp=Math.hypot(b.vx,b.vy);
+      if(sp>MAXV){ b.vx*=MAXV/sp; b.vy*=MAXV/sp; }
+      b.prevY=b.y;
+      b.x += b.vx*dt; b.y += b.vy*dt;
+    }
+    // 벽/깔때기 충돌
+    for(const b of balls){
+      if(b.finished) continue;
+      for(const s of segments){
+        const c=closestOnSeg(b.x,b.y,s);
+        let nx=b.x-c.x, ny=b.y-c.y;
+        let d=Math.hypot(nx,ny);
+        if(d<b.r){
+          if(d<1e-4){nx=0;ny=-1;d=1;}
+          nx/=d; ny/=d;
+          const pen=b.r-d;
+          b.x+=nx*pen; b.y+=ny*pen;
+          const vn=b.vx*nx+b.vy*ny;
+          const wr=1+0.28*cfgBounce;
+          if(vn<0){ b.vx-=wr*vn*nx; b.vy-=wr*vn*ny; }
+          b.vx*=0.999;
+        }
+      }
+      // 못 충돌
+      for(const p of pegs){
+        let nx=b.x-p.x, ny=b.y-p.y;
+        let d=Math.hypot(nx,ny); const rr=b.r+p.r;
+        if(d<rr){
+          if(d<1e-4){nx=(Math.random()-0.5);ny=-1;d=1;}
+          nx/=d; ny/=d;
+          const pen=rr-d;
+          b.x+=nx*pen; b.y+=ny*pen;
+          const vn=b.vx*nx+b.vy*ny;
+          const prr=1+0.5*cfgBounce;
+          if(vn<0){ b.vx-=prr*vn*nx; b.vy-=prr*vn*ny; }
+        }
+      }
+    }
+    // 공-공 충돌
+    for(let i=0;i<balls.length;i++){
+      const a=balls[i]; if(a.finished) continue;
+      for(let j=i+1;j<balls.length;j++){
+        const b=balls[j]; if(b.finished) continue;
+        let nx=b.x-a.x, ny=b.y-a.y;
+        let d=Math.hypot(nx,ny); const rr=a.r+b.r;
+        if(d<rr){
+          if(d<1e-4){nx=(Math.random()-0.5);ny=(Math.random()-0.5);d=Math.hypot(nx,ny)||1;}
+          nx/=d; ny/=d;
+          const pen=(rr-d)*0.5;
+          a.x-=nx*pen; a.y-=ny*pen; b.x+=nx*pen; b.y+=ny*pen;
+          const rvx=b.vx-a.vx, rvy=b.vy-a.vy;
+          const vn=rvx*nx+rvy*ny;
+          if(vn<0){
+            const imp=(1+0.2)*vn/2;
+            a.vx+=imp*nx; a.vy+=imp*ny; b.vx-=imp*nx; b.vy-=imp*ny;
+          }
+        }
+      }
+    }
+    // 결승선 통과
+    for(const b of balls){
+      if(b.finished) continue;
+      if(b.prevY<finishY && b.y>=finishY){
+        b.finished=true; b.rank=finishedOrder.length+1;
+        finishedOrder.push(b);
+        b.vy*=0.3;
+      }
+    }
+  }
+
+  // ---- render ----
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // 결승선
+    ctx.strokeStyle='rgba(55,211,155,.55)'; ctx.setLineDash([6,6]); ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(centerX-chuteHalf,finishY); ctx.lineTo(centerX+chuteHalf,finishY); ctx.stroke();
+    ctx.setLineDash([]);
+    // 벽
+    ctx.lineWidth=4; ctx.lineCap='round';
+    ctx.strokeStyle='#414a7d';
+    for(const s of segments){ ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke(); }
+    // 못
+    ctx.fillStyle='#5a6499';
+    for(const p of pegs){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
+    // 공
+    for(const b of balls){
+      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7);
+      ctx.fillStyle=b.color; ctx.fill();
+      if(b.finished){ ctx.globalAlpha=.4; ctx.fillStyle='#000'; ctx.fill(); ctx.globalAlpha=1; }
+      // 라벨
+      const label=b.r>=11? b.name : (b.name.length>2? b.name.slice(0,2): b.name);
+      ctx.fillStyle='#fff'; ctx.font=`700 ${Math.max(9,b.r*0.85)}px sans-serif`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(label,b.x,b.y);
+      // 순위 배지 (완주)
+      if(b.finished){
+        ctx.fillStyle=b.rank===1?'#ffcb45':'#fff';
+        ctx.font=`800 ${Math.max(10,b.r*0.9)}px sans-serif`;
+        ctx.fillText('#'+b.rank,b.x,b.y-b.r-8);
+      }
+    }
+  }
+
+  // ---- loop ----
+  function frame(){
+    if(state!=='racing'){ return; }
+    const sub=6, dt=(1/60)/sub;
+    for(let k=0;k<sub;k++) step(dt);
+    draw();
+    const remaining=balls.filter(b=>!b.finished).length;
+    $('toolbar').textContent=`진행 중 · 도착 ${finishedOrder.length}/${balls.length}`;
+    if(remaining===0){ finishRace(); return; }
+    // 안전장치: 남은 공이 멈춰 오래 안 내려오면 강제 종료
+    if(remaining<=2){
+      const stuck=balls.filter(b=>!b.finished).every(b=>Math.hypot(b.vx,b.vy)<25 && b.y<finishY);
+      if(stuck){ settleTimer++; if(settleTimer>90){ forceFinish(); return; } }
+      else settleTimer=0;
+    }
+    raf=requestAnimationFrame(frame);
+  }
+
+  function forceFinish(){
+    balls.filter(b=>!b.finished).sort((a,b)=>a.y-b.y||a.id-b.id).forEach(b=>{
+      b.finished=true; b.rank=finishedOrder.length+1; finishedOrder.push(b);
+    });
+    finishRace();
+  }
+
+  function finishRace(){
+    state='done'; draw();
+    $('toolbar').textContent='완료!';
+    $('startBtn').disabled=false;
+    showResult();
+  }
+
+  // ---- result ----
+  function showResult(){
+    const box=$('result');
+    const total=finishedOrder.length;
+    let winIds=new Set(), loseIds=new Set();
+    const count=Math.max(1,Math.min(total,+$('pickCount').value||1));
+    if(pickMode==='first'){ finishedOrder.slice(0,count).forEach(b=>winIds.add(b.id)); }
+    else if(pickMode==='last'){ finishedOrder.slice(-count).forEach(b=>loseIds.add(b.id)); }
+
+    let html='<ol>';
+    finishedOrder.forEach(b=>{
+      const cls = winIds.has(b.id)?'win': loseIds.has(b.id)?'lose':'';
+      html+=`<li class="${cls}"><span class="rk">${b.rank}</span>`+
+            `<span class="dot" style="background:${b.color}"></span>`+
+            `<span>${escapeHtml(b.name)}</span></li>`;
+    });
+    html+='</ol>';
+    box.innerHTML=html;
+
+    // 배너
+    const banner=$('banner');
+    if(pickMode==='first'){
+      banner.textContent='🏆 '+finishedOrder.slice(0,count).map(b=>b.name).join(', ');
+    }else if(pickMode==='last'){
+      banner.textContent='🎯 '+finishedOrder.slice(-count).map(b=>b.name).join(', ');
+    }else{
+      banner.textContent='🏁 순서 결정!';
+    }
+    banner.classList.add('show');
+    setTimeout(()=>banner.classList.remove('show'),3500);
+  }
+  function escapeHtml(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+  // ---- 슬라이더 라벨 ----
+  const sliderLabels={
+    pG:v=> v<1100?'느림': v<1900?'보통':'빠름',
+    pC:v=> v<90?'좁음': v<130?'보통':'넓음',
+    pB:v=> v<80?'약함': v<115?'보통':'강함',
+    pP:v=> v<=2?'듬성': v==3?'보통':'촘촘',
+  };
+  ['pG','pC','pB','pP'].forEach(id=>{
+    const el=$(id), vid='v'+id.slice(1);
+    const upd=()=>$(vid).textContent=sliderLabels[id](+el.value);
+    el.oninput=upd; upd();
+  });
+
+  // ---- controls ----
+  $('startBtn').onclick=()=>{
+    if(state==='racing') return;
+    cancelAnimationFrame(raf); settleTimer=0;
+    $('banner').classList.remove('show');
+    if(!setup()) return;
+    $('startBtn').disabled=true;
+    raf=requestAnimationFrame(frame);
+  };
+
+  $('resetBtn').onclick=()=>{
+    cancelAnimationFrame(raf); state='idle'; balls=[]; finishedOrder=[];
+    buildBoard(14); draw2idle();
+    $('result').innerHTML='<div class="empty">아직 결과가 없어요.</div>';
+    $('toolbar').textContent='대기 중';
+    $('startBtn').disabled=false;
+  };
+
+  function draw2idle(){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='#414a7d'; ctx.lineWidth=4; ctx.lineCap='round';
+    for(const s of segments){ ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke(); }
+    ctx.fillStyle='#5a6499';
+    for(const p of pegs){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
+    ctx.fillStyle='#5a6499'; ctx.font='16px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('참가자를 입력하고 시작을 누르세요',centerX,300);
+  }
+
+  // 초기 화면
+  buildBoard(14); draw2idle();
+})();
+</script>
+</body>
+</html>
