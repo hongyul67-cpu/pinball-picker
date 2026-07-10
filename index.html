@@ -21,22 +21,23 @@
   h1{font-size:20px;margin:16px 0 2px;letter-spacing:-.3px}
   .sub{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center;padding:0 12px}
   .wrap{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;justify-content:center;
-        width:100%;max-width:1040px;padding:0 12px 40px}
+        width:100%;max-width:1060px;padding:0 12px 40px}
   .stage{position:relative;background:linear-gradient(#141830,#10132a);
          border:1px solid var(--line);border-radius:16px;overflow:hidden;
          box-shadow:0 20px 60px rgba(0,0,0,.45);flex:0 0 auto}
   canvas{display:block;touch-action:none}
-  .side{flex:1 1 300px;min-width:280px;max-width:380px;display:flex;flex-direction:column;gap:14px}
+  .side{flex:1 1 320px;min-width:290px;max-width:390px;display:flex;flex-direction:column;gap:14px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
   .card h2{font-size:13px;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.3px}
-  textarea{width:100%;height:120px;resize:vertical;background:var(--panel2);color:var(--txt);
+  input[type=text], textarea{width:100%;background:var(--panel2);color:var(--txt);
            border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px;line-height:1.5}
-  textarea:focus{outline:none;border-color:var(--accent)}
+  textarea{height:120px;resize:vertical}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent)}
   .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .seg button{flex:1;background:none;border:none;color:var(--muted);padding:8px 6px;font-size:13px;cursor:pointer}
   .seg button.on{background:var(--accent);color:#fff}
-  input[type=number]{width:70px;background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+  input[type=number]{width:64px;background:var(--panel2);color:var(--txt);border:1px solid var(--line);
                      border-radius:8px;padding:7px 8px;font-size:14px}
   label.mini{color:var(--muted);font-size:13px}
   .btns{display:flex;gap:10px}
@@ -50,89 +51,117 @@
                 border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer}
   .quick button:hover{border-color:var(--accent);color:var(--txt)}
   .slider{display:flex;align-items:center;gap:10px;margin:9px 0}
-  .slider label{width:70px;font-size:13px;color:var(--muted);flex:0 0 auto}
+  .slider label{width:74px;font-size:13px;color:var(--muted);flex:0 0 auto}
   .slider input[type=range]{flex:1;accent-color:var(--accent);height:4px}
-  .slider .val{width:52px;text-align:right;font-size:12px;color:var(--txt);flex:0 0 auto}
+  .slider .val{width:50px;text-align:right;font-size:12px;color:var(--txt);flex:0 0 auto}
   .hintlite{font-weight:400;color:var(--muted);font-size:11px}
-  .result{max-height:340px;overflow:auto}
-  .result ol{margin:0;padding:0;list-style:none;counter-reset:r}
-  .result li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;margin-bottom:6px;
-             background:var(--panel2);font-size:15px}
-  .result li .rk{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
-                 font-size:13px;font-weight:800;color:#0f1220;background:var(--muted);flex:0 0 auto}
-  .result li.win{background:linear-gradient(90deg,rgba(255,203,69,.18),transparent);border:1px solid var(--gold)}
-  .result li.win .rk{background:var(--gold)}
-  .result li.lose{background:linear-gradient(90deg,rgba(255,93,143,.16),transparent);border:1px solid var(--pink)}
-  .result li.lose .rk{background:var(--pink)}
+  .chk{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--txt);cursor:pointer;user-select:none}
+  .chk input{width:18px;height:18px;accent-color:var(--accent)}
+  .board{max-height:360px;overflow:auto}
+  .board ol{margin:0;padding:0;list-style:none}
+  .board li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;margin-bottom:5px;
+             background:var(--panel2);font-size:14px}
+  .board li .rk{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+                 font-size:12px;font-weight:800;color:#0f1220;background:var(--muted);flex:0 0 auto}
+  .board li .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .board li .ct{font-size:12px;color:var(--muted);flex:0 0 auto}
+  .board li.win{background:linear-gradient(90deg,rgba(255,203,69,.18),transparent);border:1px solid var(--gold)}
+  .board li.win .rk{background:var(--gold)}
+  .board li.lose{background:linear-gradient(90deg,rgba(255,93,143,.16),transparent);border:1px solid var(--pink)}
+  .board li.lose .rk{background:var(--pink)}
   .dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
   .empty{color:var(--muted);font-size:14px;text-align:center;padding:24px 0}
-  .banner{position:absolute;left:0;right:0;top:14px;text-align:center;pointer-events:none;
-          font-size:26px;font-weight:800;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.6);
-          opacity:0;transition:opacity .3s}
+  .banner{position:absolute;left:0;right:0;top:12px;text-align:center;pointer-events:none;
+          font-size:24px;font-weight:800;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.7);
+          opacity:0;transition:opacity .3s;padding:0 12px}
   .banner.show{opacity:1}
-  .toolbar{position:absolute;top:10px;left:10px;font-size:12px;color:var(--muted);
+  .clock{position:absolute;top:10px;right:12px;font-size:26px;font-weight:800;color:var(--gold);
+         text-shadow:0 2px 12px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
+  .clock.warn{color:var(--pink)}
+  .toolbar{position:absolute;top:12px;left:12px;font-size:12px;color:var(--muted);
            background:rgba(0,0,0,.35);border-radius:8px;padding:4px 8px}
 </style>
 </head>
 <body>
   <h1>🎱 구슬 낙하 뽑기</h1>
-  <div class="sub">공들이 못에 부딪히고 서로 밀치며 떨어져요. 도착 순서로 발표 순번·당번을 정합니다. 눈으로 직접 지켜보세요!</div>
+  <div class="sub">공들이 회전 장애물·바람·펀치를 뚫고 떨어져요. 도착 순서(또는 버티기)로 발표 순번·당번을 정합니다. 눈으로 직접 지켜보세요!</div>
 
   <div class="wrap">
     <div class="stage">
       <div class="toolbar" id="toolbar">대기 중</div>
+      <div class="clock" id="clock"></div>
       <div class="banner" id="banner"></div>
-      <canvas id="cv" width="520" height="780"></canvas>
+      <canvas id="cv" width="520" height="800"></canvas>
     </div>
 
     <div class="side">
       <div class="card">
-        <h2>참가자</h2>
+        <h2>제목 (선택)</h2>
+        <input type="text" id="title" placeholder="예) 청소 당번 뽑기 / 발표 순서 정하기">
+      </div>
+
+      <div class="card">
+        <h2>참가자 — 이름 · 조 이름</h2>
         <div class="seg" id="inputMode" style="margin-bottom:10px">
-          <button data-m="names" class="on">이름 입력</button>
+          <button data-m="names" class="on">이름 · 조 입력</button>
           <button data-m="range">번호 1~N</button>
         </div>
         <div id="namesBox">
-          <textarea id="names" placeholder="한 줄에 한 명씩 입력하세요&#10;예)&#10;김하나&#10;이두리&#10;박세라"></textarea>
+          <textarea id="names" placeholder="한 줄에 한 명(또는 한 조)씩 입력&#10;예)&#10;1조&#10;2조&#10;3조&#10;혹은&#10;김하나&#10;이두리"></textarea>
           <div class="quick">
-            <button data-n="5">5명</button>
+            <button data-n="조5">1~5조</button>
+            <button data-n="6">6명</button>
             <button data-n="10">10명</button>
-            <button data-n="15">15명</button>
-            <button data-n="예시">예시 채우기</button>
+            <button data-n="예시">이름 예시</button>
           </div>
         </div>
         <div id="rangeBox" style="display:none">
           <div class="row"><label class="mini">1번부터</label>
-            <input type="number" id="rangeN" value="20" min="2" max="60">
+            <input type="number" id="rangeN" value="20" min="2" max="40">
             <label class="mini">번까지</label>
           </div>
         </div>
+        <div class="slider" style="margin-top:12px"><label>1인당 공</label>
+          <input type="range" id="pBalls" min="1" max="5" step="1" value="3">
+          <span class="val" id="vBalls">3개</span></div>
       </div>
 
       <div class="card">
         <h2>당첨 기준</h2>
         <div class="seg" id="pickMode">
           <button data-p="order" class="on">전체 순서</button>
-          <button data-p="first">1등 당첨</button>
-          <button data-p="last">꼴등 당첨</button>
+          <button data-p="first">1등 뽑기</button>
+          <button data-p="last">꼴등 뽑기</button>
         </div>
         <div class="row" style="margin-top:10px">
-          <label class="mini">몇 명 뽑기</label>
+          <label class="mini">몇 명(조) 뽑기</label>
           <input type="number" id="pickCount" value="1" min="1" max="10">
-          <label class="mini" id="pickHint">명 (당번·발표자)</label>
         </div>
+        <div class="hintlite" id="pickHint" style="margin-top:8px">먼저 도착 = 1등 (발표자·순번)</div>
       </div>
 
       <div class="card">
-        <h2>물리 느낌 <span class="hintlite">(다음 시작부터 적용)</span></h2>
+        <h2>제한 시간</h2>
+        <div class="seg" id="timeMode">
+          <button data-t="0" class="on">없음</button>
+          <button data-t="15">15초</button>
+          <button data-t="25">25초</button>
+          <button data-t="40">40초</button>
+        </div>
+        <div class="hintlite" style="margin-top:8px">시간 종료 시 <b>도착 못한 공이 많거나 가장 위에 있는 팀</b>이 꼴등 → '꼴등 뽑기'와 함께 쓰면 버티기 게임!</div>
+      </div>
+
+      <div class="card">
+        <h2>장애물 · 물리 <span class="hintlite">(다음 시작부터)</span></h2>
+        <label class="chk" style="margin-bottom:10px"><input type="checkbox" id="obsOn" checked>회전 막대 · 바람 · 펀치 · 회전판 (액티브 장애물)</label>
         <div class="slider"><label>낙하 속도</label>
-          <input type="range" id="pG" min="800" max="2600" step="50" value="1500">
+          <input type="range" id="pG" min="600" max="2000" step="50" value="1000">
           <span class="val" id="vG">보통</span></div>
         <div class="slider"><label>통로 폭</label>
-          <input type="range" id="pC" min="70" max="180" step="5" value="100">
+          <input type="range" id="pC" min="70" max="180" step="5" value="105">
           <span class="val" id="vC">보통</span></div>
         <div class="slider"><label>튕김</label>
-          <input type="range" id="pB" min="40" max="130" step="5" value="100">
+          <input type="range" id="pB" min="40" max="140" step="5" value="100">
           <span class="val" id="vB">보통</span></div>
         <div class="slider"><label>못 촘촘함</label>
           <input type="range" id="pP" min="1" max="5" step="1" value="3">
@@ -145,8 +174,8 @@
       </div>
 
       <div class="card">
-        <h2>결과</h2>
-        <div class="result" id="result"><div class="empty">아직 결과가 없어요.</div></div>
+        <h2>실시간 순위</h2>
+        <div class="board" id="board"><div class="empty">참가자를 입력하고 시작하세요.</div></div>
       </div>
     </div>
   </div>
@@ -154,348 +183,450 @@
 <script>
 (function(){
   "use strict";
-  const cv = document.getElementById('cv');
-  const ctx = cv.getContext('2d');
-  const W = cv.width, H = cv.height;
+  const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+  const $=id=>document.getElementById(id);
 
   // ---- layout ----
-  const wallPad = 34;
-  const funnelTopY = 560, funnelBotY = 686;
-  const centerX = W/2;
-  let chuteHalf = 34;          // 반칸 (반지름에 따라 재계산)
-  const finishY = 700;
-  const chuteBotY = 772;
+  const wallPad=34, funnelTopY=560, funnelBotY=686, finishY=700, chuteBotY=756, trayY=780;
+  const centerX=W/2;
+  let chuteHalf=30;
 
-  const PALETTE = ['#5b8cff','#37d39b','#ffcb45','#ff5d8f','#7a5cff','#ff9f43',
-    '#4dd0e1','#e879f9','#a3e635','#fb7185','#38bdf8','#f472b6','#facc15','#34d399'];
+  const PALETTE=['#5b8cff','#37d39b','#ffcb45','#ff5d8f','#7a5cff','#ff9f43',
+    '#4dd0e1','#e879f9','#a3e635','#fb7185','#38bdf8','#f472b6','#facc15','#34d399',
+    '#c084fc','#fca5a5','#5eead4','#fdba74','#93c5fd','#f0abfc'];
 
-  let balls = [], segments = [], pegs = [];
-  let running = false, finishedOrder = [], raf = 0, settleTimer = 0;
-  let state = 'idle'; // idle | racing | done
+  // ---- state ----
+  let teams=[], balls=[], segments=[], pegs=[], movers=[];
+  let finishedOrder=[], totalBalls=0;
+  let raf=0, state='idle', simTime=0, raceTime=0, settleTimer=0, frameCount=0;
+  let timeLimit=0;
 
-  // 물리 설정 (슬라이더로 조절, 시작 시 반영)
-  let cfgG = 1500, cfgChuteMul = 1, cfgPegGap = 54, cfgBounce = 1;
+  // ---- config ----
+  let cfgG=1000, cfgChuteMul=1.05, cfgPegGap=54, cfgBounce=1, obstaclesOn=true;
+  let inputMode='names', pickMode='order';
 
-  // ---- input handling ----
-  const $ = id => document.getElementById(id);
-  let inputMode = 'names', pickMode = 'order';
-
+  // ================= UI wiring =================
   document.querySelectorAll('#inputMode button').forEach(b=>b.onclick=()=>{
     document.querySelectorAll('#inputMode button').forEach(x=>x.classList.remove('on'));
     b.classList.add('on'); inputMode=b.dataset.m;
-    $('namesBox').style.display = inputMode==='names'?'block':'none';
-    $('rangeBox').style.display = inputMode==='range'?'block':'none';
+    $('namesBox').style.display=inputMode==='names'?'block':'none';
+    $('rangeBox').style.display=inputMode==='range'?'block':'none';
   });
   document.querySelectorAll('#pickMode button').forEach(b=>b.onclick=()=>{
     document.querySelectorAll('#pickMode button').forEach(x=>x.classList.remove('on'));
     b.classList.add('on'); pickMode=b.dataset.p;
-    $('pickCount').closest('.row').style.display = pickMode==='order'?'none':'flex';
+    $('pickHint').innerHTML = pickMode==='order' ? '도착 순서대로 전체 순위를 매겨요.'
+      : pickMode==='first' ? '먼저 도착 = 1등 (발표자·순번)'
+      : '오래 남거나 가장 위 = 꼴등 (당번). <b>제한 시간</b>과 함께 쓰세요!';
+  });
+  document.querySelectorAll('#timeMode button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#timeMode button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
   });
   document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>{
     const n=b.dataset.n;
     if(n==='예시'){ $('names').value='김하나\n이두리\n박세라\n최네오\n정오름\n한여섯'; return;}
+    if(n==='조5'){ $('names').value='1조\n2조\n3조\n4조\n5조'; return;}
     const arr=[]; for(let i=1;i<=+n;i++) arr.push(i+'번');
     $('names').value=arr.join('\n');
   });
-
-  function getNames(){
-    if(inputMode==='range'){
-      const n=Math.max(2,Math.min(60,+$('rangeN').value||0));
-      return Array.from({length:n},(_,i)=>(i+1)+'번');
-    }
-    return $('names').value.split('\n').map(s=>s.trim()).filter(Boolean);
-  }
-
-  // ---- build board ----
-  function buildBoard(r){
-    segments = [];
-    const S=(x1,y1,x2,y2)=>segments.push({x1,y1,x2,y2});
-    // 바깥 벽
-    S(wallPad, 60, wallPad, funnelTopY);
-    S(W-wallPad, 60, W-wallPad, funnelTopY);
-    // 깔때기
-    chuteHalf = Math.max(r*1.35*cfgChuteMul, 18);
-    const clx = centerX-chuteHalf, crx = centerX+chuteHalf;
-    S(wallPad, funnelTopY, clx, funnelBotY);
-    S(W-wallPad, funnelTopY, crx, funnelBotY);
-    // 배출구(단일 통로)
-    S(clx, funnelBotY, clx, chuteBotY);
-    S(crx, funnelBotY, crx, chuteBotY);
-
-    // 못(peg) 격자
-    pegs=[];
-    const pr=5, gap=cfgPegGap;
-    let row=0;
-    for(let y=150;y<=funnelTopY-30;y+=gap*0.85){
-      const off = (row%2)? gap/2:0;
-      for(let x=wallPad+34+off; x<=W-wallPad-30; x+=gap){
-        pegs.push({x,y,r:pr});
-      }
-      row++;
-    }
-  }
-
-  function radiusFor(n){
-    if(n<=8) return 16;
-    if(n<=14) return 13;
-    if(n<=22) return 11;
-    if(n<=34) return 9;
-    return 7.5;
-  }
-
-  function setup(){
-    const names=getNames();
-    if(names.length<2){ alert('참가자를 2명 이상 입력하세요.'); return null;}
-    // 슬라이더 값 반영
-    cfgG       = +$('pG').value;
-    cfgChuteMul= +$('pC').value/100;
-    cfgBounce  = +$('pB').value/100;
-    cfgPegGap  = 74 - (+$('pP').value)*7;   // 촘촘함 1~5 → 간격 67~39
-    const r=radiusFor(names.length);
-    buildBoard(r);
-    balls=[];
-    // 상단에 격자로 배치 (겹침 없이)
-    const cols=Math.max(1,Math.floor((W-2*wallPad-20)/(r*2+6)));
-    const gapx=(W-2*wallPad-20)/cols;
-    names.forEach((nm,i)=>{
-      const c=i%cols, rw=Math.floor(i/cols);
-      const x=wallPad+18+gapx*(c+0.5)+(Math.random()-0.5)*4;
-      const y=30 - rw*(r*2+8);
-      balls.push({
-        x,y,vx:(Math.random()-0.5)*20,vy:0,r,name:nm,
-        color:PALETTE[i%PALETTE.length], id:i, finished:false, rank:0, prevY:y
-      });
-    });
-    finishedOrder=[]; state='racing';
-    return true;
-  }
-
-  // ---- physics ----
-  const MAXV=1500;
-  function closestOnSeg(px,py,s){
-    const dx=s.x2-s.x1, dy=s.y2-s.y1;
-    const L2=dx*dx+dy*dy || 1e-6;
-    let t=((px-s.x1)*dx+(py-s.y1)*dy)/L2;
-    t=Math.max(0,Math.min(1,t));
-    return {x:s.x1+t*dx, y:s.y1+t*dy};
-  }
-
-  function step(dt){
-    for(const b of balls){
-      if(b.finished) continue;
-      b.vy += cfgG*dt;
-      // 속도 제한
-      const sp=Math.hypot(b.vx,b.vy);
-      if(sp>MAXV){ b.vx*=MAXV/sp; b.vy*=MAXV/sp; }
-      b.prevY=b.y;
-      b.x += b.vx*dt; b.y += b.vy*dt;
-    }
-    // 벽/깔때기 충돌
-    for(const b of balls){
-      if(b.finished) continue;
-      for(const s of segments){
-        const c=closestOnSeg(b.x,b.y,s);
-        let nx=b.x-c.x, ny=b.y-c.y;
-        let d=Math.hypot(nx,ny);
-        if(d<b.r){
-          if(d<1e-4){nx=0;ny=-1;d=1;}
-          nx/=d; ny/=d;
-          const pen=b.r-d;
-          b.x+=nx*pen; b.y+=ny*pen;
-          const vn=b.vx*nx+b.vy*ny;
-          const wr=1+0.28*cfgBounce;
-          if(vn<0){ b.vx-=wr*vn*nx; b.vy-=wr*vn*ny; }
-          b.vx*=0.999;
-        }
-      }
-      // 못 충돌
-      for(const p of pegs){
-        let nx=b.x-p.x, ny=b.y-p.y;
-        let d=Math.hypot(nx,ny); const rr=b.r+p.r;
-        if(d<rr){
-          if(d<1e-4){nx=(Math.random()-0.5);ny=-1;d=1;}
-          nx/=d; ny/=d;
-          const pen=rr-d;
-          b.x+=nx*pen; b.y+=ny*pen;
-          const vn=b.vx*nx+b.vy*ny;
-          const prr=1+0.5*cfgBounce;
-          if(vn<0){ b.vx-=prr*vn*nx; b.vy-=prr*vn*ny; }
-        }
-      }
-    }
-    // 공-공 충돌
-    for(let i=0;i<balls.length;i++){
-      const a=balls[i]; if(a.finished) continue;
-      for(let j=i+1;j<balls.length;j++){
-        const b=balls[j]; if(b.finished) continue;
-        let nx=b.x-a.x, ny=b.y-a.y;
-        let d=Math.hypot(nx,ny); const rr=a.r+b.r;
-        if(d<rr){
-          if(d<1e-4){nx=(Math.random()-0.5);ny=(Math.random()-0.5);d=Math.hypot(nx,ny)||1;}
-          nx/=d; ny/=d;
-          const pen=(rr-d)*0.5;
-          a.x-=nx*pen; a.y-=ny*pen; b.x+=nx*pen; b.y+=ny*pen;
-          const rvx=b.vx-a.vx, rvy=b.vy-a.vy;
-          const vn=rvx*nx+rvy*ny;
-          if(vn<0){
-            const imp=(1+0.2)*vn/2;
-            a.vx+=imp*nx; a.vy+=imp*ny; b.vx-=imp*nx; b.vy-=imp*ny;
-          }
-        }
-      }
-    }
-    // 결승선 통과
-    for(const b of balls){
-      if(b.finished) continue;
-      if(b.prevY<finishY && b.y>=finishY){
-        b.finished=true; b.rank=finishedOrder.length+1;
-        finishedOrder.push(b);
-        b.vy*=0.3;
-      }
-    }
-  }
-
-  // ---- render ----
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    // 결승선
-    ctx.strokeStyle='rgba(55,211,155,.55)'; ctx.setLineDash([6,6]); ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(centerX-chuteHalf,finishY); ctx.lineTo(centerX+chuteHalf,finishY); ctx.stroke();
-    ctx.setLineDash([]);
-    // 벽
-    ctx.lineWidth=4; ctx.lineCap='round';
-    ctx.strokeStyle='#414a7d';
-    for(const s of segments){ ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke(); }
-    // 못
-    ctx.fillStyle='#5a6499';
-    for(const p of pegs){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
-    // 공
-    for(const b of balls){
-      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7);
-      ctx.fillStyle=b.color; ctx.fill();
-      if(b.finished){ ctx.globalAlpha=.4; ctx.fillStyle='#000'; ctx.fill(); ctx.globalAlpha=1; }
-      // 라벨
-      const label=b.r>=11? b.name : (b.name.length>2? b.name.slice(0,2): b.name);
-      ctx.fillStyle='#fff'; ctx.font=`700 ${Math.max(9,b.r*0.85)}px sans-serif`;
-      ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.fillText(label,b.x,b.y);
-      // 순위 배지 (완주)
-      if(b.finished){
-        ctx.fillStyle=b.rank===1?'#ffcb45':'#fff';
-        ctx.font=`800 ${Math.max(10,b.r*0.9)}px sans-serif`;
-        ctx.fillText('#'+b.rank,b.x,b.y-b.r-8);
-      }
-    }
-  }
-
-  // ---- loop ----
-  function frame(){
-    if(state!=='racing'){ return; }
-    const sub=6, dt=(1/60)/sub;
-    for(let k=0;k<sub;k++) step(dt);
-    draw();
-    const remaining=balls.filter(b=>!b.finished).length;
-    $('toolbar').textContent=`진행 중 · 도착 ${finishedOrder.length}/${balls.length}`;
-    if(remaining===0){ finishRace(); return; }
-    // 안전장치: 남은 공이 멈춰 오래 안 내려오면 강제 종료
-    if(remaining<=2){
-      const stuck=balls.filter(b=>!b.finished).every(b=>Math.hypot(b.vx,b.vy)<25 && b.y<finishY);
-      if(stuck){ settleTimer++; if(settleTimer>90){ forceFinish(); return; } }
-      else settleTimer=0;
-    }
-    raf=requestAnimationFrame(frame);
-  }
-
-  function forceFinish(){
-    balls.filter(b=>!b.finished).sort((a,b)=>a.y-b.y||a.id-b.id).forEach(b=>{
-      b.finished=true; b.rank=finishedOrder.length+1; finishedOrder.push(b);
-    });
-    finishRace();
-  }
-
-  function finishRace(){
-    state='done'; draw();
-    $('toolbar').textContent='완료!';
-    $('startBtn').disabled=false;
-    showResult();
-  }
-
-  // ---- result ----
-  function showResult(){
-    const box=$('result');
-    const total=finishedOrder.length;
-    let winIds=new Set(), loseIds=new Set();
-    const count=Math.max(1,Math.min(total,+$('pickCount').value||1));
-    if(pickMode==='first'){ finishedOrder.slice(0,count).forEach(b=>winIds.add(b.id)); }
-    else if(pickMode==='last'){ finishedOrder.slice(-count).forEach(b=>loseIds.add(b.id)); }
-
-    let html='<ol>';
-    finishedOrder.forEach(b=>{
-      const cls = winIds.has(b.id)?'win': loseIds.has(b.id)?'lose':'';
-      html+=`<li class="${cls}"><span class="rk">${b.rank}</span>`+
-            `<span class="dot" style="background:${b.color}"></span>`+
-            `<span>${escapeHtml(b.name)}</span></li>`;
-    });
-    html+='</ol>';
-    box.innerHTML=html;
-
-    // 배너
-    const banner=$('banner');
-    if(pickMode==='first'){
-      banner.textContent='🏆 '+finishedOrder.slice(0,count).map(b=>b.name).join(', ');
-    }else if(pickMode==='last'){
-      banner.textContent='🎯 '+finishedOrder.slice(-count).map(b=>b.name).join(', ');
-    }else{
-      banner.textContent='🏁 순서 결정!';
-    }
-    banner.classList.add('show');
-    setTimeout(()=>banner.classList.remove('show'),3500);
-  }
-  function escapeHtml(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
-
-  // ---- 슬라이더 라벨 ----
   const sliderLabels={
-    pG:v=> v<1100?'느림': v<1900?'보통':'빠름',
+    pBalls:v=>v+'개',
+    pG:v=> v<950?'느림': v<1500?'보통':'빠름',
     pC:v=> v<90?'좁음': v<130?'보통':'넓음',
     pB:v=> v<80?'약함': v<115?'보통':'강함',
     pP:v=> v<=2?'듬성': v==3?'보통':'촘촘',
   };
-  ['pG','pC','pB','pP'].forEach(id=>{
+  ['pBalls','pG','pC','pB','pP'].forEach(id=>{
     const el=$(id), vid='v'+id.slice(1);
     const upd=()=>$(vid).textContent=sliderLabels[id](+el.value);
     el.oninput=upd; upd();
   });
 
-  // ---- controls ----
+  function getNames(){
+    if(inputMode==='range'){
+      const n=Math.max(2,Math.min(40,+$('rangeN').value||0));
+      return Array.from({length:n},(_,i)=>(i+1)+'번');
+    }
+    return $('names').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  }
+
+  // ================= board build =================
+  function buildBoard(r){
+    segments=[];
+    const S=(x1,y1,x2,y2)=>segments.push({x1,y1,x2,y2});
+    S(wallPad,60,wallPad,funnelTopY);
+    S(W-wallPad,60,W-wallPad,funnelTopY);
+    chuteHalf=Math.max(r*1.35*cfgChuteMul,18);
+    const clx=centerX-chuteHalf, crx=centerX+chuteHalf;
+    S(wallPad,funnelTopY,clx,funnelBotY);
+    S(W-wallPad,funnelTopY,crx,funnelBotY);
+    S(clx,funnelBotY,clx,chuteBotY);
+    S(crx,funnelBotY,crx,chuteBotY);
+
+    // 못
+    pegs=[]; const pr=5, gap=cfgPegGap; let row=0;
+    for(let y=150;y<=funnelTopY-40;y+=gap*0.85){
+      const off=(row%2)? gap/2:0;
+      for(let x=wallPad+34+off; x<=W-wallPad-30; x+=gap){ pegs.push({x,y,r:pr}); }
+      row++;
+    }
+
+    // 액티브 장애물
+    movers=[];
+    if(obstaclesOn){
+      // 회전 막대(스피너) — 필드 곳곳
+      movers.push({kind:'spin',cx:145,cy:245,len:82,thick:5,ang:0.3,om:2.6,e:0.7});
+      movers.push({kind:'spin',cx:375,cy:245,len:82,thick:5,ang:1.1,om:-3.0,e:0.7});
+      movers.push({kind:'spin',cx:260,cy:355,len:104,thick:5,ang:0.0,om:2.1,e:0.7});
+      movers.push({kind:'spin',cx:150,cy:470,len:78,thick:5,ang:0.6,om:-2.5,e:0.7});
+      movers.push({kind:'spin',cx:370,cy:470,len:78,thick:5,ang:0.9,om:2.9,e:0.7});
+      // 범퍼(정기적으로 펄스하며 밀어내는 원)
+      movers.push({kind:'bump',cx:260,cy:230,rad:16,e:1.15,freq:2.4});
+      movers.push({kind:'bump',cx:90, cy:400,rad:14,e:1.1, freq:1.9});
+      movers.push({kind:'bump',cx:430,cy:400,rad:14,e:1.1, freq:2.7});
+      // 출구 회전판 — 목구멍을 주기적으로 여닫음
+      movers.push({kind:'plate',cx:centerX,cy:funnelBotY-34,len:chuteHalf*2+34,thick:6,ang:0,om:3.4,e:0.65});
+      // 펀치 — 목구멍에서 위로 쳐올림
+      movers.push({kind:'punch',cx:centerX,y0:funnelBotY-58,amp:30,half:chuteHalf*0.9,thick:6,freq:3.1,e:0.95});
+      // 바람 — 출구 밴드에서 좌우로 흔들고 주기적으로 위로 밀어올림
+      movers.push({kind:'wind',x1:wallPad,x2:W-wallPad,y0:596,y1:696,amp:1200,freq:1.7,freq2:2.2});
+    }
+  }
+
+  function radiusFor(n){
+    if(n<=10) return 14;
+    if(n<=20) return 11;
+    if(n<=32) return 9.5;
+    if(n<=50) return 8;
+    return 6.8;
+  }
+
+  // ================= setup =================
+  function setup(){
+    const names=getNames();
+    if(names.length<2){ alert('참가자를 2명(조) 이상 입력하세요.'); return false;}
+    cfgG=+$('pG').value; cfgChuteMul=+$('pC').value/100;
+    cfgBounce=+$('pB').value/100; cfgPegGap=74-(+$('pP').value)*7;
+    obstaclesOn=$('obsOn').checked;
+    timeLimit=+document.querySelector('#timeMode button.on').dataset.t;
+
+    let per=Math.max(1,Math.min(5,+$('pBalls').value));
+    // 성능: 전체 공 80개 제한
+    if(names.length*per>80) per=Math.max(1,Math.floor(80/names.length));
+    totalBalls=names.length*per;
+
+    const r=radiusFor(totalBalls);
+    buildBoard(r);
+
+    teams=names.map((nm,i)=>({name:nm,color:PALETTE[i%PALETTE.length],balls:[],firstFinish:Infinity}));
+    balls=[];
+    // 스폰 슬롯(상단 격자, 위로 쌓기) — 섞어서 배치
+    const cols=Math.max(1,Math.floor((W-2*wallPad-16)/(r*2+5)));
+    const gapx=(W-2*wallPad-16)/cols;
+    let slot=0;
+    const order=[];
+    teams.forEach((t,ti)=>{ for(let k=0;k<per;k++) order.push(ti); });
+    for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
+    order.forEach(ti=>{
+      const c=slot%cols, rw=Math.floor(slot/cols);
+      const x=wallPad+16+gapx*(c+0.5)+(Math.random()-0.5)*5;
+      const y=20 - rw*(r*2+6);
+      const b={x,y,vx:(Math.random()-0.5)*30,vy:0,r,owner:ti,color:teams[ti].color,
+               finished:false,forder:-1,prevY:y};
+      balls.push(b); teams[ti].balls.push(b); slot++;
+    });
+
+    finishedOrder=[]; simTime=0; raceTime=0; settleTimer=0; frameCount=0;
+    state='racing';
+    return true;
+  }
+
+  // ================= physics =================
+  const MAXV=1500;
+  function closestOnSeg(px,py,s){
+    const dx=s.x2-s.x1, dy=s.y2-s.y1, L2=dx*dx+dy*dy||1e-6;
+    let t=((px-s.x1)*dx+(py-s.y1)*dy)/L2; t=Math.max(0,Math.min(1,t));
+    return {x:s.x1+t*dx, y:s.y1+t*dy};
+  }
+  function collideMover(b,x1,y1,x2,y2,thick,sv,e){
+    const c=closestOnSeg(b.x,b.y,{x1,y1,x2,y2});
+    let nx=b.x-c.x, ny=b.y-c.y, d=Math.hypot(nx,ny); const rr=b.r+thick;
+    if(d<rr){
+      if(d<1e-4){nx=Math.random()-0.5;ny=-1;d=1;}
+      nx/=d; ny/=d;
+      b.x+=nx*(rr-d); b.y+=ny*(rr-d);
+      const s=sv(c.x,c.y);
+      let rvx=b.vx-s.x, rvy=b.vy-s.y;
+      const vn=rvx*nx+rvy*ny;
+      if(vn<0){ rvx-=(1+e)*vn*nx; rvy-=(1+e)*vn*ny; b.vx=s.x+rvx; b.vy=s.y+rvy; }
+    }
+  }
+
+  function step(dt){
+    simTime+=dt;
+    // 움직이는 장애물 각도 갱신
+    for(const m of movers){ if(m.kind==='spin'||m.kind==='plate') m.ang+=m.om*dt; }
+
+    // 적분
+    for(const b of balls){
+      if(b.finished) continue;
+      b.vy+=cfgG*dt;
+      const sp=Math.hypot(b.vx,b.vy); if(sp>MAXV){ b.vx*=MAXV/sp; b.vy*=MAXV/sp; }
+      b.prevY=b.y; b.x+=b.vx*dt; b.y+=b.vy*dt;
+    }
+    // 벽 · 못
+    for(const b of balls){
+      if(b.finished) continue;
+      for(const s of segments){
+        const c=closestOnSeg(b.x,b.y,s);
+        let nx=b.x-c.x, ny=b.y-c.y, d=Math.hypot(nx,ny);
+        if(d<b.r){ if(d<1e-4){nx=0;ny=-1;d=1;} nx/=d;ny/=d;
+          b.x+=nx*(b.r-d); b.y+=ny*(b.r-d);
+          const vn=b.vx*nx+b.vy*ny, wr=1+0.28*cfgBounce;
+          if(vn<0){ b.vx-=wr*vn*nx; b.vy-=wr*vn*ny; } b.vx*=0.999;
+        }
+      }
+      for(const p of pegs){
+        let nx=b.x-p.x, ny=b.y-p.y, d=Math.hypot(nx,ny); const rr=b.r+p.r;
+        if(d<rr){ if(d<1e-4){nx=Math.random()-0.5;ny=-1;d=1;} nx/=d;ny/=d;
+          b.x+=nx*(rr-d); b.y+=ny*(rr-d);
+          const vn=b.vx*nx+b.vy*ny, prr=1+0.5*cfgBounce;
+          if(vn<0){ b.vx-=prr*vn*nx; b.vy-=prr*vn*ny; }
+        }
+      }
+    }
+    // 액티브 장애물
+    for(const b of balls){
+      if(b.finished) continue;
+      for(const m of movers){
+        if(m.kind==='spin'||m.kind==='plate'){
+          const co=Math.cos(m.ang), si=Math.sin(m.ang);
+          const x1=m.cx-co*m.len/2, y1=m.cy-si*m.len/2, x2=m.cx+co*m.len/2, y2=m.cy+si*m.len/2;
+          collideMover(b,x1,y1,x2,y2,m.thick,(px,py)=>({x:-m.om*(py-m.cy),y:m.om*(px-m.cx)}),Math.min(.95,m.e*cfgBounce));
+        }else if(m.kind==='punch'){
+          const ph=Math.sin(m.freq*simTime), yy=m.y0-m.amp*Math.max(0,ph);
+          const vy=(ph>0)? -m.amp*m.freq*Math.cos(m.freq*simTime):0;
+          collideMover(b,m.cx-m.half,yy,m.cx+m.half,yy,m.thick,()=>({x:0,y:vy}),Math.min(.95,m.e*cfgBounce));
+        }else if(m.kind==='bump'){
+          const puls=1+0.4*Math.max(0,Math.sin(m.freq*simTime));
+          let nx=b.x-m.cx, ny=b.y-m.cy, d=Math.hypot(nx,ny); const rr=b.r+m.rad*puls;
+          if(d<rr){ if(d<1e-4){nx=Math.random()-0.5;ny=-1;d=1;} nx/=d;ny/=d;
+            b.x+=nx*(rr-d); b.y+=ny*(rr-d);
+            const vn=b.vx*nx+b.vy*ny, e=1+m.e*cfgBounce*0.6;
+            if(vn<0){ b.vx-=e*vn*nx; b.vy-=e*vn*ny; }
+          }
+        }else if(m.kind==='wind'){
+          if(b.x>m.x1&&b.x<m.x2&&b.y>m.y0&&b.y<m.y1){
+            b.vx += m.amp*Math.sin(m.freq*simTime + b.x*0.045)*dt;
+            const up=Math.max(0,Math.sin(m.freq2*simTime));
+            b.vy -= cfgG*0.9*up*dt;  // 주기적 상승 돌풍 → 될 듯 말 듯
+          }
+        }
+      }
+    }
+    // 공-공
+    for(let i=0;i<balls.length;i++){
+      const a=balls[i]; if(a.finished) continue;
+      for(let j=i+1;j<balls.length;j++){
+        const b=balls[j]; if(b.finished) continue;
+        let nx=b.x-a.x, ny=b.y-a.y, d=Math.hypot(nx,ny); const rr=a.r+b.r;
+        if(d<rr){ if(d<1e-4){nx=Math.random()-0.5;ny=Math.random()-0.5;d=Math.hypot(nx,ny)||1;}
+          nx/=d;ny/=d; const pen=(rr-d)*0.5;
+          a.x-=nx*pen; a.y-=ny*pen; b.x+=nx*pen; b.y+=ny*pen;
+          const rvx=b.vx-a.vx, rvy=b.vy-a.vy, vn=rvx*nx+rvy*ny;
+          if(vn<0){ const imp=(1+0.2)*vn/2; a.vx+=imp*nx; a.vy+=imp*ny; b.vx-=imp*nx; b.vy-=imp*ny; }
+        }
+      }
+    }
+    // 결승선
+    for(const b of balls){
+      if(b.finished) continue;
+      if(b.prevY<finishY && b.y>=finishY){
+        b.finished=true; b.forder=finishedOrder.length; finishedOrder.push(b);
+        const t=teams[b.owner]; t.firstFinish=Math.min(t.firstFinish,b.forder);
+      }
+    }
+  }
+
+  // ================= scoring =================
+  function teamProgress(t){
+    let s=0;
+    for(const b of t.balls){
+      if(b.finished) s+=3 + (1 - b.forder/Math.max(1,totalBalls));
+      else s+=Math.min(0.98,Math.max(0,b.y/finishY));
+    }
+    return s;
+  }
+  function teamArrived(t){ return t.balls.filter(b=>b.finished).length; }
+  function rankedTeams(){
+    return teams.map((t,i)=>({t,i,score:teamProgress(t),arr:teamArrived(t),first:t.firstFinish}))
+      .sort((a,b)=> b.score-a.score || b.arr-a.arr || a.first-b.first || a.i-b.i);
+  }
+
+  // ================= render =================
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // 바람 밴드
+    if(obstaclesOn){
+      const wm=movers.find(m=>m.kind==='wind');
+      if(wm){ const up=Math.max(0,Math.sin(wm.freq2*simTime));
+        ctx.fillStyle=`rgba(93,140,255,${0.05+0.10*up})`;
+        ctx.fillRect(wm.x1,wm.y0,wm.x2-wm.x1,wm.y1-wm.y0);
+      }
+    }
+    // 결승선
+    ctx.strokeStyle='rgba(55,211,155,.6)'; ctx.setLineDash([6,6]); ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(centerX-chuteHalf,finishY); ctx.lineTo(centerX+chuteHalf,finishY); ctx.stroke();
+    ctx.setLineDash([]);
+    // 벽
+    ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle='#414a7d';
+    for(const s of segments){ ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke(); }
+    // 못
+    ctx.fillStyle='#5a6499';
+    for(const p of pegs){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
+    // 장애물
+    for(const m of movers){
+      if(m.kind==='spin'||m.kind==='plate'){
+        const co=Math.cos(m.ang), si=Math.sin(m.ang);
+        ctx.strokeStyle=m.kind==='plate'?'#ff9f43':'#ffcb45'; ctx.lineWidth=m.thick*2; ctx.lineCap='round';
+        ctx.beginPath(); ctx.moveTo(m.cx-co*m.len/2,m.cy-si*m.len/2); ctx.lineTo(m.cx+co*m.len/2,m.cy+si*m.len/2); ctx.stroke();
+        ctx.fillStyle='#2b3358'; ctx.beginPath(); ctx.arc(m.cx,m.cy,4,0,7); ctx.fill();
+      }else if(m.kind==='punch'){
+        const yy=m.y0-m.amp*Math.max(0,Math.sin(m.freq*simTime));
+        ctx.strokeStyle='#ff5d8f'; ctx.lineWidth=m.thick*2; ctx.lineCap='round';
+        ctx.beginPath(); ctx.moveTo(m.cx-m.half,yy); ctx.lineTo(m.cx+m.half,yy); ctx.stroke();
+      }else if(m.kind==='bump'){
+        const puls=1+0.4*Math.max(0,Math.sin(m.freq*simTime));
+        ctx.fillStyle='#7a5cff'; ctx.globalAlpha=.9;
+        ctx.beginPath(); ctx.arc(m.cx,m.cy,m.rad*puls,0,7); ctx.fill();
+        ctx.globalAlpha=1; ctx.fillStyle='#fff';
+        ctx.beginPath(); ctx.arc(m.cx,m.cy,3,0,7); ctx.fill();
+      }
+    }
+    // 도착 트레이
+    finishedOrder.forEach((b,i)=>{
+      const sp=Math.min(2*b.r+2,(W-40)/Math.max(1,totalBalls));
+      const x=22+i*sp, y=trayY;
+      ctx.beginPath(); ctx.arc(x,y,Math.min(b.r,7),0,7); ctx.fillStyle=b.color; ctx.fill();
+    });
+    // 공 (미도착만 필드에)
+    for(const b of balls){
+      if(b.finished) continue;
+      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7); ctx.fillStyle=b.color; ctx.fill();
+      if(b.r>=9){
+        const nm=teams[b.owner].name;
+        const label=nm.length>3?nm.slice(0,3):nm;
+        ctx.fillStyle='rgba(0,0,0,.55)'; ctx.font=`700 ${Math.max(8,b.r*0.72)}px sans-serif`;
+        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(label,b.x,b.y);
+      }
+    }
+  }
+
+  // ================= scoreboard / result =================
+  function updateBoard(final){
+    const rk=rankedTeams();
+    const box=$('board');
+    const count=Math.max(1,Math.min(rk.length,+$('pickCount').value||1));
+    let win=new Set(), lose=new Set();
+    if(pickMode==='first') rk.slice(0,count).forEach(x=>win.add(x.i));
+    else if(pickMode==='last') rk.slice(-count).forEach(x=>lose.add(x.i));
+    let html='<ol>';
+    rk.forEach((x,idx)=>{
+      const cls=win.has(x.i)?'win':lose.has(x.i)?'lose':'';
+      html+=`<li class="${cls}"><span class="rk">${idx+1}</span>`+
+            `<span class="dot" style="background:${x.t.color}"></span>`+
+            `<span class="nm">${escapeHtml(x.t.name)}</span>`+
+            `<span class="ct">${x.arr}/${x.t.balls.length}</span></li>`;
+    });
+    html+='</ol>';
+    box.innerHTML=html;
+
+    if(final){
+      const banner=$('banner'); const ttl=$('title').value.trim();
+      const pre=ttl?ttl+' — ':'';
+      if(pickMode==='first') banner.textContent='🏆 '+pre+rk.slice(0,count).map(x=>x.t.name).join(', ');
+      else if(pickMode==='last') banner.textContent='🎯 '+pre+rk.slice(-count).map(x=>x.t.name).join(', ')+' (당번)';
+      else banner.textContent='🏁 '+pre+'순서 결정!';
+      banner.classList.add('show');
+      setTimeout(()=>banner.classList.remove('show'),4000);
+    }
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+  // ================= loop =================
+  function frame(){
+    if(state!=='racing') return;
+    const sub=6, dt=(1/60)/sub;
+    for(let k=0;k<sub;k++) step(dt);
+    raceTime+=1/60; frameCount++;
+    draw();
+    if(frameCount%4===0) updateBoard(false);
+
+    // 시계
+    if(timeLimit>0){
+      const left=Math.max(0,timeLimit-raceTime);
+      const cl=$('clock'); cl.textContent='⏱ '+left.toFixed(1);
+      cl.classList.toggle('warn',left<=5);
+      $('toolbar').textContent=`도착 ${finishedOrder.length}/${totalBalls}`;
+      if(left<=0){ endRace('⏱ 시간 종료!'); return; }
+    }else{
+      $('clock').textContent='';
+      $('toolbar').textContent=`도착 ${finishedOrder.length}/${totalBalls}`;
+    }
+
+    const remaining=balls.filter(b=>!b.finished).length;
+    if(remaining===0){ endRace(); return; }
+    // 안전장치(제한시간 없을 때): 남은 공들이 멈춰 오래 안 내려오면 종료
+    if(timeLimit===0){
+      if(remaining<=Math.max(2,totalBalls*0.1)){
+        const stuck=balls.filter(b=>!b.finished).every(b=>Math.hypot(b.vx,b.vy)<25);
+        if(stuck){ if(++settleTimer>120){ endRace(); return; } } else settleTimer=0;
+      }
+      if(raceTime>100){ endRace(); return; }
+    }
+    raf=requestAnimationFrame(frame);
+  }
+
+  function endRace(msg){
+    state='done'; draw(); updateBoard(true);
+    $('toolbar').textContent=msg||'완료!';
+    $('startBtn').disabled=false;
+  }
+
+  // ================= controls =================
   $('startBtn').onclick=()=>{
     if(state==='racing') return;
-    cancelAnimationFrame(raf); settleTimer=0;
-    $('banner').classList.remove('show');
+    cancelAnimationFrame(raf); $('banner').classList.remove('show');
     if(!setup()) return;
     $('startBtn').disabled=true;
     raf=requestAnimationFrame(frame);
   };
-
   $('resetBtn').onclick=()=>{
-    cancelAnimationFrame(raf); state='idle'; balls=[]; finishedOrder=[];
-    buildBoard(14); draw2idle();
-    $('result').innerHTML='<div class="empty">아직 결과가 없어요.</div>';
-    $('toolbar').textContent='대기 중';
+    cancelAnimationFrame(raf); state='idle'; balls=[]; teams=[]; finishedOrder=[];
+    obstaclesOn=$('obsOn').checked; buildBoard(12); drawIdle();
+    $('board').innerHTML='<div class="empty">참가자를 입력하고 시작하세요.</div>';
+    $('toolbar').textContent='대기 중'; $('clock').textContent='';
     $('startBtn').disabled=false;
   };
 
-  function draw2idle(){
+  function drawIdle(){
     ctx.clearRect(0,0,W,H);
-    ctx.strokeStyle='#414a7d'; ctx.lineWidth=4; ctx.lineCap='round';
+    ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle='#414a7d';
     for(const s of segments){ ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke(); }
     ctx.fillStyle='#5a6499';
     for(const p of pegs){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
+    for(const m of movers){
+      if(m.kind==='spin'||m.kind==='plate'){ ctx.strokeStyle=m.kind==='plate'?'#ff9f43':'#ffcb45'; ctx.lineWidth=m.thick*2;
+        ctx.beginPath(); ctx.moveTo(m.cx-m.len/2,m.cy); ctx.lineTo(m.cx+m.len/2,m.cy); ctx.stroke(); }
+      else if(m.kind==='bump'){ ctx.fillStyle='#7a5cff'; ctx.beginPath(); ctx.arc(m.cx,m.cy,m.rad,0,7); ctx.fill(); }
+    }
     ctx.fillStyle='#5a6499'; ctx.font='16px sans-serif'; ctx.textAlign='center';
     ctx.fillText('참가자를 입력하고 시작을 누르세요',centerX,300);
   }
 
-  // 초기 화면
-  buildBoard(14); draw2idle();
+  obstaclesOn=$('obsOn').checked; buildBoard(12); drawIdle();
 })();
 </script>
 </body>
