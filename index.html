@@ -7,8 +7,7 @@
 <style>
   :root{
     --bg:#0f1220; --panel:#171b2e; --panel2:#1e2440; --line:#2b3358;
-    --txt:#e8ecff; --muted:#9aa3c7; --accent:#5b8cff; --gold:#ffcb45; --pink:#ff5d8f;
-    --green:#37d39b;
+    --txt:#e8ecff; --muted:#9aa3c7; --accent:#5b8cff; --gold:#ffcb45; --pink:#ff5d8f; --green:#37d39b;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
@@ -17,41 +16,28 @@
       radial-gradient(900px 500px at 15% 0%,rgba(122,92,255,.20),transparent 60%),
       radial-gradient(900px 500px at 85% 10%,rgba(255,93,143,.16),transparent 60%),
       radial-gradient(1200px 700px at 50% -10%,#1a2140,#0b0e1c 62%);
-    background-attachment:fixed;
-    color:var(--txt);
+    background-attachment:fixed; color:var(--txt);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif;
     display:flex;flex-direction:column;align-items:center;min-height:100%;
   }
-  h1{font-size:22px;margin:16px 0 2px;letter-spacing:-.3px;font-weight:900;
+  h1{font-size:22px;margin:14px 0 2px;letter-spacing:-.3px;font-weight:900;
      background:linear-gradient(90deg,#5b8cff,#e879f9,#ffcb45,#37d39b,#5b8cff);
      background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
      animation:hue 6s linear infinite;filter:drop-shadow(0 2px 12px rgba(123,92,255,.5))}
   @keyframes hue{to{background-position:300% 0}}
   @keyframes pop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
   @keyframes shine{to{background-position:200% 0}}
-  .sub{color:var(--muted);font-size:13px;margin-bottom:12px;text-align:center;padding:0 12px}
-  .wrap{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;justify-content:center;
-        width:100%;max-width:1060px;padding:0 12px 40px}
-  .stage{position:relative;background:linear-gradient(#141830,#10132a);
-         border:1px solid transparent;border-radius:16px;overflow:hidden;
-         box-shadow:0 0 0 1px rgba(123,92,255,.5), 0 0 34px rgba(91,140,255,.35), 0 20px 60px rgba(0,0,0,.5);
-         flex:0 1 520px;width:100%;max-width:520px}
-  canvas{display:block;width:100%;height:auto;touch-action:none}
-  .side{flex:1 1 320px;min-width:290px;max-width:390px;display:flex;flex-direction:column;gap:14px}
-  @media(max-width:900px){
-    .wrap{flex-direction:column;align-items:center;gap:14px}
-    .side{max-width:520px;width:100%;min-width:0}
-    .stage{flex:0 0 auto}
-  }
-  @media(max-width:520px){
-    h1{font-size:18px;margin-top:12px} .sub{font-size:12px}
-    .card{padding:12px} body{overflow-x:hidden}
-  }
+  .sub{color:var(--muted);font-size:13px;margin-bottom:14px;text-align:center;padding:0 12px}
+  .screen{width:100%;display:flex;flex-direction:column;align-items:center}
+  .screen[hidden]{display:none}
+
+  /* ---------- 설정 화면 ---------- */
+  .setup{width:100%;max-width:470px;padding:0 12px 44px;display:flex;flex-direction:column;gap:14px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
   .card h2{font-size:13px;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.3px}
   input[type=text], textarea{width:100%;background:var(--panel2);color:var(--txt);
            border:1px solid var(--line);border-radius:10px;padding:10px;font-size:14px;line-height:1.5}
-  textarea{height:120px;resize:vertical}
+  textarea{height:110px;resize:vertical}
   input:focus,textarea:focus{outline:none;border-color:var(--accent)}
   .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
@@ -60,14 +46,6 @@
   input[type=number]{width:64px;background:var(--panel2);color:var(--txt);border:1px solid var(--line);
                      border-radius:8px;padding:7px 8px;font-size:14px}
   label.mini{color:var(--muted);font-size:13px}
-  .btns{display:flex;gap:10px}
-  .btn{flex:1;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;transition:.15s}
-  .btn.go{background:linear-gradient(100deg,#5b8cff,#7a5cff,#e879f9,#5b8cff);background-size:200% 100%;
-          color:#fff;box-shadow:0 6px 22px rgba(122,92,255,.5);animation:shine 3s linear infinite}
-  .btn.go:hover{filter:brightness(1.12)}
-  .btn.go:active{transform:translateY(1px)}
-  .btn.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line);flex:0 0 auto;padding:13px 16px}
-  .btn:disabled{opacity:.5;cursor:default}
   .quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
   .quick button{background:var(--panel2);border:1px solid var(--line);color:var(--muted);
                 border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer}
@@ -79,11 +57,47 @@
   .hintlite{font-weight:400;color:var(--muted);font-size:11px}
   .chk{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--txt);cursor:pointer;user-select:none}
   .chk input{width:18px;height:18px;accent-color:var(--accent)}
-  .board{max-height:360px;overflow:auto}
+  .maps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .maps button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;
+               background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 10px;cursor:pointer;color:var(--txt)}
+  .maps button b{font-size:13px}
+  .maps button span{font-size:11px;color:var(--muted)}
+  .maps button.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 14px rgba(91,140,255,.35)}
+  #preview{display:block;width:100%;max-width:220px;margin:12px auto 0;border-radius:10px;border:1px solid var(--line)}
+  .btn{border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;transition:.15s;width:100%}
+  .btn.go{background:linear-gradient(100deg,#5b8cff,#7a5cff,#e879f9,#5b8cff);background-size:200% 100%;
+          color:#fff;box-shadow:0 6px 22px rgba(122,92,255,.5);animation:shine 3s linear infinite}
+  .btn.go:hover{filter:brightness(1.12)} .btn.go:active{transform:translateY(1px)}
+
+  /* ---------- 게임 화면 ---------- */
+  .game{width:100%;max-width:1000px;padding:0 12px 40px;display:flex;flex-direction:column;gap:12px}
+  .gtop{display:flex;align-items:center;gap:10px}
+  .gtop .gtitle{flex:1;text-align:center;font-size:16px;font-weight:800;
+                overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .gbtn{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:10px;
+        padding:9px 13px;font-size:14px;font-weight:700;cursor:pointer;flex:0 0 auto}
+  .gbtn:hover{border-color:var(--accent)}
+  .gbtn.rep{background:linear-gradient(120deg,#5b8cff,#7a5cff);border-color:transparent;color:#fff}
+  .gamewrap{display:flex;gap:14px;align-items:stretch}
+  .stage{position:relative;background:linear-gradient(#141830,#10132a);
+         border:1px solid transparent;border-radius:16px;overflow:hidden;
+         box-shadow:0 0 0 1px rgba(123,92,255,.5), 0 0 34px rgba(91,140,255,.35), 0 20px 60px rgba(0,0,0,.5);
+         flex:0 1 460px;min-width:0}
+  #cv{display:block;width:100%;height:auto;touch-action:none}
+  .gcol{flex:1 1 230px;min-width:0;display:flex;flex-direction:column;gap:12px}
+  .zoombox{position:relative;background:#0d1024;border:1px solid var(--line);border-radius:14px;
+           overflow:hidden;box-shadow:0 0 0 1px rgba(255,203,69,.25),0 0 20px rgba(255,203,69,.15)}
+  .zoombox .zlabel{position:absolute;top:6px;left:8px;font-size:11px;font-weight:700;color:var(--gold);
+                   background:rgba(0,0,0,.4);border-radius:6px;padding:2px 7px;z-index:2}
+  #zoom{display:block;width:100%;height:auto}
+  .boardcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;flex:1 1 auto;
+             display:flex;flex-direction:column;min-height:0}
+  .boardcard h2{font-size:13px;margin:0 0 8px;color:var(--muted);font-weight:600}
+  .board{overflow:auto;flex:1 1 auto}
   .board ol{margin:0;padding:0;list-style:none}
-  .board li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;margin-bottom:5px;
+  .board li{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:9px;margin-bottom:5px;
              background:var(--panel2);font-size:14px}
-  .board li .rk{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  .board li .rk{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
                  font-size:12px;font-weight:800;color:#0f1220;background:var(--muted);flex:0 0 auto}
   .board li .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .board li .ct{font-size:12px;color:var(--muted);flex:0 0 auto}
@@ -91,34 +105,35 @@
   .board li.win .rk{background:var(--gold)}
   .board li.lose{background:linear-gradient(90deg,rgba(255,93,143,.16),transparent);border:1px solid var(--pink)}
   .board li.lose .rk{background:var(--pink)}
-  .dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
-  .empty{color:var(--muted);font-size:14px;text-align:center;padding:24px 0}
-  .banner{position:absolute;left:0;right:0;top:12px;text-align:center;pointer-events:none;
-          font-size:24px;font-weight:900;color:#fff;
+  .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+  .banner{position:absolute;left:0;right:0;top:10px;text-align:center;pointer-events:none;
+          font-size:21px;font-weight:900;color:#fff;
           text-shadow:0 0 18px rgba(255,203,69,.9),0 0 34px rgba(255,93,143,.7),0 2px 6px rgba(0,0,0,.8);
           opacity:0;transition:opacity .3s;padding:0 12px}
   .banner.show{opacity:1;animation:pop .5s ease-out}
-  .card h2{position:relative}
-  .clock{position:absolute;top:10px;right:12px;font-size:26px;font-weight:800;color:var(--gold);
+  .clock{position:absolute;top:8px;right:10px;font-size:24px;font-weight:800;color:var(--gold);
          text-shadow:0 2px 12px rgba(0,0,0,.6);font-variant-numeric:tabular-nums}
   .clock.warn{color:var(--pink)}
-  .toolbar{position:absolute;top:12px;left:12px;font-size:12px;color:var(--muted);
+  .toolbar{position:absolute;top:10px;left:10px;font-size:12px;color:var(--muted);
            background:rgba(0,0,0,.35);border-radius:8px;padding:4px 8px}
+
+  @media(max-width:820px){
+    .gamewrap{flex-direction:column}
+    .stage{flex:0 0 auto;align-self:center;width:100%;max-width:440px}
+    .gcol{flex-direction:row;flex:0 0 auto}
+    .zoombox{flex:0 0 132px} .boardcard{flex:1 1 auto}
+    .board{max-height:230px}
+  }
+  @media(max-width:520px){ h1{font-size:18px;margin-top:10px} body{overflow-x:hidden} }
 </style>
 </head>
 <body>
   <h1>🎱 구슬 낙하 뽑기</h1>
-  <div class="sub">공들이 회전 장애물·바람·펀치를 뚫고 떨어져요. 도착 순서(또는 버티기)로 발표 순번·당번을 정합니다. 눈으로 직접 지켜보세요!</div>
 
-  <div class="wrap">
-    <div class="stage">
-      <div class="toolbar" id="toolbar">대기 중</div>
-      <div class="clock" id="clock"></div>
-      <div class="banner" id="banner"></div>
-      <canvas id="cv" width="520" height="800"></canvas>
-    </div>
-
-    <div class="side">
+  <!-- ================= 설정 화면 ================= -->
+  <div id="setup" class="screen">
+    <div class="sub">사람·조 이름과 공 개수를 정하고 · 맵을 고른 뒤 · <b>시작</b>을 누르면 핀볼이 시작돼요!</div>
+    <div class="setup">
       <div class="card">
         <h2>제목 (선택)</h2>
         <input type="text" id="title" placeholder="예) 청소 당번 뽑기 / 발표 순서 정하기">
@@ -161,7 +176,7 @@
           <label class="mini">몇 명(조) 뽑기</label>
           <input type="number" id="pickCount" value="1" min="1" max="10">
         </div>
-        <div class="hintlite" id="pickHint" style="margin-top:8px">먼저 도착 = 1등 (발표자·순번)</div>
+        <div class="hintlite" id="pickHint" style="margin-top:8px">도착 순서대로 전체 순위를 매겨요.</div>
       </div>
 
       <div class="card">
@@ -176,30 +191,58 @@
       </div>
 
       <div class="card">
-        <h2>장애물 · 물리 <span class="hintlite">(다음 시작부터)</span></h2>
-        <label class="chk" style="margin-bottom:10px"><input type="checkbox" id="obsOn" checked>회전 막대 · 바람 · 펀치 · 회전판 (액티브 장애물)</label>
-        <div class="slider"><label>낙하 속도</label>
-          <input type="range" id="pG" min="600" max="2000" step="50" value="1000">
-          <span class="val" id="vG">보통</span></div>
-        <div class="slider"><label>통로 폭</label>
-          <input type="range" id="pC" min="70" max="180" step="5" value="105">
-          <span class="val" id="vC">보통</span></div>
-        <div class="slider"><label>튕김</label>
-          <input type="range" id="pB" min="40" max="140" step="5" value="100">
-          <span class="val" id="vB">보통</span></div>
-        <div class="slider"><label>못 촘촘함</label>
-          <input type="range" id="pP" min="1" max="5" step="1" value="3">
-          <span class="val" id="vP">보통</span></div>
-      </div>
-
-      <div class="btns">
-        <button class="btn go" id="startBtn">시작 ▶</button>
-        <button class="btn ghost" id="resetBtn">초기화</button>
+        <h2>맵 선택 <span class="hintlite">4종 · 아래 미리보기</span></h2>
+        <div class="maps" id="mapSel">
+          <button data-map="0"><b>① 클래식 플린코</b><span>촘촘한 못 · 순함</span></button>
+          <button data-map="1" class="on"><b>② 회전 폭풍</b><span>회전막대·범퍼 가득</span></button>
+          <button data-map="2"><b>③ 지그재그 미로</b><span>비스듬 경사로 · 복잡</span></button>
+          <button data-map="3"><b>④ 범퍼 아수라장</b><span>범퍼 폭발 · 최고난도</span></button>
+        </div>
+        <canvas id="preview" width="240" height="370"></canvas>
       </div>
 
       <div class="card">
-        <h2>실시간 순위</h2>
-        <div class="board" id="board"><div class="empty">참가자를 입력하고 시작하세요.</div></div>
+        <h2>장애물 · 물리</h2>
+        <label class="chk" style="margin-bottom:10px"><input type="checkbox" id="obsOn" checked>액티브 장애물 켜기 (회전막대·바람·펀치·회전판)</label>
+        <div class="slider"><label>낙하 속도</label>
+          <input type="range" id="pG" min="600" max="2000" step="50" value="1000"><span class="val" id="vG">보통</span></div>
+        <div class="slider"><label>통로 폭</label>
+          <input type="range" id="pC" min="70" max="180" step="5" value="105"><span class="val" id="vC">보통</span></div>
+        <div class="slider"><label>튕김</label>
+          <input type="range" id="pB" min="40" max="140" step="5" value="100"><span class="val" id="vB">보통</span></div>
+        <div class="slider"><label>못 촘촘함</label>
+          <input type="range" id="pP" min="1" max="5" step="1" value="3"><span class="val" id="vP">보통</span></div>
+      </div>
+
+      <button class="btn go" id="startBtn">🎬 시작 — 핀볼 GO!</button>
+    </div>
+  </div>
+
+  <!-- ================= 게임 화면 ================= -->
+  <div id="game" class="screen" hidden>
+    <div class="game">
+      <div class="gtop">
+        <button class="gbtn" id="backBtn">✎ 설정</button>
+        <div class="gtitle" id="gtitle">구슬 낙하 뽑기</div>
+        <button class="gbtn rep" id="replayBtn">⟳ 다시</button>
+      </div>
+      <div class="gamewrap">
+        <div class="stage">
+          <div class="toolbar" id="toolbar">준비</div>
+          <div class="clock" id="clock"></div>
+          <div class="banner" id="banner"></div>
+          <canvas id="cv" width="520" height="800"></canvas>
+        </div>
+        <div class="gcol">
+          <div class="zoombox">
+            <div class="zlabel" id="zlabel">🔍 접전 확대</div>
+            <canvas id="zoom" width="240" height="340"></canvas>
+          </div>
+          <div class="boardcard">
+            <h2>실시간 순위</h2>
+            <div class="board" id="board"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -207,9 +250,11 @@
 <script>
 (function(){
   "use strict";
-  const cv=document.getElementById('cv'), ctx=cv.getContext('2d');
-  const W=cv.width, H=cv.height;
   const $=id=>document.getElementById(id);
+  const cv=$('cv'), ctx=cv.getContext('2d');
+  const zcv=$('zoom'), zctx=zcv.getContext('2d');
+  const pcv=$('preview'), pctx=pcv.getContext('2d');
+  const W=cv.width, H=cv.height, ZW=zcv.width, ZH=zcv.height, PW=pcv.width, PH=pcv.height;
 
   // ---- layout ----
   const wallPad=34, funnelTopY=560, funnelBotY=686, finishY=700, chuteBotY=756, trayY=780;
@@ -224,109 +269,105 @@
   let teams=[], balls=[], segments=[], pegs=[], movers=[];
   let finishedOrder=[], totalBalls=0;
   let raf=0, state='idle', simTime=0, raceTime=0, settleTimer=0, frameCount=0;
-  let timeLimit=0;
-  let particles=[], stars=[], drain=false;
+  let timeLimit=0, particles=[], stars=[], drain=false, curMap=1;
+  let camX=centerX, camY=340, camS=2.2;
 
-  // ---- 반짝이 파티클 ----
-  function spawnBurst(x,y,color,n,speed){
-    if(particles.length>200) return;
-    for(let i=0;i<n;i++){
-      const a=Math.random()*6.283, sp=speed*(0.4+Math.random());
-      particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-speed*0.3,
-        life:0.5+Math.random()*0.6,max:1.1,color,size:1.5+Math.random()*2.5});
-    }
-  }
-  function shower(colors){
-    for(let i=0;i<90;i++){
-      particles.push({x:Math.random()*W,y:-10-Math.random()*80,
-        vx:(Math.random()-0.5)*120,vy:120+Math.random()*220,
-        life:1.4+Math.random()*1.2,max:2.6,color:colors[i%colors.length],
-        size:2.5+Math.random()*3.5,conf:true});
-    }
-  }
-  function updateParticles(dt){
-    for(let i=particles.length-1;i>=0;i--){
-      const p=particles[i];
-      p.vy+=420*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.life-=dt;
-      if(p.life<=0||p.y>H+20) particles.splice(i,1);
-    }
-  }
-  function drawParticles(){
-    for(const p of particles){
-      const a=Math.max(0,p.life/p.max);
-      ctx.globalAlpha=a; ctx.fillStyle=p.color;
-      ctx.shadowBlur=8; ctx.shadowColor=p.color;
-      if(p.conf){ ctx.fillRect(p.x-p.size/2,p.y-p.size,p.size,p.size*1.8); }
-      else{ ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,7); ctx.fill(); }
-    }
-    ctx.globalAlpha=1; ctx.shadowBlur=0;
-  }
-  function initStars(){
-    stars=[]; for(let i=0;i<42;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:0.6+Math.random()*1.4,ph:Math.random()*6.283});
-  }
-  function drawStars(){
-    for(const s of stars){
-      const tw=0.35+0.45*(0.5+0.5*Math.sin(simTime*2+s.ph));
-      ctx.globalAlpha=tw; ctx.fillStyle='#aab6ff';
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7); ctx.fill();
-    }
-    ctx.globalAlpha=1;
-  }
-
-  // ---- config ----
   let cfgG=1000, cfgChuteMul=1.05, cfgPegGap=54, cfgBounce=1, obstaclesOn=true;
   let inputMode='names', pickMode='order';
 
-  // ================= UI wiring =================
-  document.querySelectorAll('#inputMode button').forEach(b=>b.onclick=()=>{
-    document.querySelectorAll('#inputMode button').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on'); inputMode=b.dataset.m;
-    $('namesBox').style.display=inputMode==='names'?'block':'none';
-    $('rangeBox').style.display=inputMode==='range'?'block':'none';
-  });
-  document.querySelectorAll('#pickMode button').forEach(b=>b.onclick=()=>{
-    document.querySelectorAll('#pickMode button').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on'); pickMode=b.dataset.p;
-    $('pickHint').innerHTML = pickMode==='order' ? '도착 순서대로 전체 순위를 매겨요.'
-      : pickMode==='first' ? '먼저 도착 = 1등 (발표자·순번)'
-      : '오래 남거나 가장 위 = 꼴등 (당번). <b>제한 시간</b>과 함께 쓰세요!';
-  });
-  document.querySelectorAll('#timeMode button').forEach(b=>b.onclick=()=>{
-    document.querySelectorAll('#timeMode button').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-  });
-  document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>{
-    const n=b.dataset.n;
-    if(n==='예시'){ $('names').value='김하나\n이두리\n박세라\n최네오\n정오름\n한여섯'; return;}
-    if(n==='조5'){ $('names').value='1조\n2조\n3조\n4조\n5조'; return;}
-    const arr=[]; for(let i=1;i<=+n;i++) arr.push(i+'번');
-    $('names').value=arr.join('\n');
-  });
-  const sliderLabels={
-    pBalls:v=>v+'개',
-    pG:v=> v<950?'느림': v<1500?'보통':'빠름',
-    pC:v=> v<90?'좁음': v<130?'보통':'넓음',
-    pB:v=> v<80?'약함': v<115?'보통':'강함',
-    pP:v=> v<=2?'듬성': v==3?'보통':'촘촘',
-  };
-  ['pBalls','pG','pC','pB','pP'].forEach(id=>{
-    const el=$(id), vid='v'+id.slice(1);
-    const upd=()=>$(vid).textContent=sliderLabels[id](+el.value);
-    el.oninput=upd; upd();
-  });
-
-  function getNames(){
-    if(inputMode==='range'){
-      const n=Math.max(2,Math.min(40,+$('rangeN').value||0));
-      return Array.from({length:n},(_,i)=>(i+1)+'번');
-    }
-    return $('names').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  // ================= 파티클/별 =================
+  function spawnBurst(x,y,color,n,speed){
+    if(particles.length>200) return;
+    for(let i=0;i<n;i++){ const a=Math.random()*6.283, sp=speed*(0.4+Math.random());
+      particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-speed*0.3,
+        life:0.5+Math.random()*0.6,max:1.1,color,size:1.5+Math.random()*2.5}); }
+  }
+  function shower(colors){
+    for(let i=0;i<90;i++){ particles.push({x:Math.random()*W,y:-10-Math.random()*80,
+      vx:(Math.random()-0.5)*120,vy:120+Math.random()*220,life:1.4+Math.random()*1.2,max:2.6,
+      color:colors[i%colors.length],size:2.5+Math.random()*3.5,conf:true}); }
+  }
+  function updateParticles(dt){
+    for(let i=particles.length-1;i>=0;i--){ const p=particles[i];
+      p.vy+=420*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.life-=dt;
+      if(p.life<=0||p.y>H+20) particles.splice(i,1); }
+  }
+  function drawParticles(g){
+    for(const p of particles){ const a=Math.max(0,p.life/p.max);
+      g.globalAlpha=a; g.fillStyle=p.color; g.shadowBlur=8; g.shadowColor=p.color;
+      if(p.conf){ g.fillRect(p.x-p.size/2,p.y-p.size,p.size,p.size*1.8); }
+      else{ g.beginPath(); g.arc(p.x,p.y,p.size,0,7); g.fill(); } }
+    g.globalAlpha=1; g.shadowBlur=0;
+  }
+  function initStars(){ stars=[]; for(let i=0;i<42;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:0.6+Math.random()*1.4,ph:Math.random()*6.283}); }
+  function drawStars(g){
+    for(const s of stars){ const tw=0.35+0.45*(0.5+0.5*Math.sin(simTime*2+s.ph));
+      g.globalAlpha=tw; g.fillStyle='#aab6ff'; g.beginPath(); g.arc(s.x,s.y,s.r,0,7); g.fill(); }
+    g.globalAlpha=1;
   }
 
-  // ================= board build =================
+  // ================= 맵 정의 =================
+  function exitObstacles(M,o){
+    o=o||{};
+    const plateOm=o.plateOm||3.0, wind=o.wind==null?1100:o.wind, plates=o.plates||1;
+    M({kind:'plate',cx:centerX,cy:funnelBotY-34,len:chuteHalf*2+34,thick:6,ang:0,om:plateOm,e:0.65});
+    if(plates>1) M({kind:'plate',cx:centerX,cy:funnelBotY-72,len:chuteHalf*2+8,thick:5,ang:1,om:-plateOm*0.8,e:0.6});
+    if(o.punch!==false) M({kind:'punch',cx:centerX,y0:funnelBotY-58,amp:30,half:chuteHalf*0.9,thick:6,freq:3.1,e:0.95});
+    if(wind) M({kind:'wind',x1:wallPad,x2:W-wallPad,y0:596,y1:696,amp:wind,freq:1.7,freq2:2.2});
+  }
+  const MAPS=[
+    { name:'클래식 플린코', build:({P,M,gap})=>{
+        let row=0;
+        for(let y=150;y<=520;y+=gap*0.82){ const off=(row%2)?gap/2:0;
+          for(let x=wallPad+30+off;x<=W-wallPad-28;x+=gap) P(x,y); row++; }
+        M({kind:'spin',cx:150,cy:300,len:78,thick:5,ang:0,om:1.8,e:0.7});
+        M({kind:'spin',cx:370,cy:420,len:78,thick:5,ang:1,om:-1.8,e:0.7});
+        exitObstacles(M,{plateOm:2.3,punch:false,wind:750});
+      }},
+    { name:'회전 폭풍', build:({P,M,gap})=>{
+        let row=0;
+        for(let y=170;y<=520;y+=gap*1.15){ const off=(row%2)?gap/2:0;
+          for(let x=wallPad+42+off;x<=W-wallPad-36;x+=gap*1.2) P(x,y); row++; }
+        M({kind:'spin',cx:145,cy:245,len:82,thick:5,ang:0.3,om:2.6,e:0.7});
+        M({kind:'spin',cx:375,cy:245,len:82,thick:5,ang:1.1,om:-3.0,e:0.7});
+        M({kind:'spin',cx:260,cy:355,len:104,thick:5,ang:0,om:2.1,e:0.7});
+        M({kind:'spin',cx:150,cy:470,len:78,thick:5,ang:0.6,om:-2.5,e:0.7});
+        M({kind:'spin',cx:370,cy:470,len:78,thick:5,ang:0.9,om:2.9,e:0.7});
+        M({kind:'bump',cx:260,cy:230,rad:16,e:1.15,freq:2.4});
+        M({kind:'bump',cx:90,cy:400,rad:14,e:1.1,freq:1.9});
+        M({kind:'bump',cx:430,cy:400,rad:14,e:1.1,freq:2.7});
+        exitObstacles(M,{plateOm:3.4,punch:true,wind:1200});
+      }},
+    { name:'지그재그 미로', build:({S,P,M})=>{
+        // 좌우 번갈아 경사로 (한쪽에 통과 틈)
+        S(wallPad,205, W*0.66,248);  M({kind:'bump',cx:430,cy:255,rad:15,e:1.15,freq:2.2});
+        S(W-wallPad,300, W*0.34,343); M({kind:'bump',cx:92,cy:350,rad:15,e:1.15,freq:2.5});
+        S(wallPad,395, W*0.66,438);  M({kind:'bump',cx:430,cy:445,rad:15,e:1.1,freq:2.0});
+        S(W-wallPad,490, W*0.34,533); M({kind:'bump',cx:92,cy:540,rad:14,e:1.1,freq:2.6});
+        // 경사로 사이 못 몇 개
+        for(const [x,y] of [[160,275],[300,275],[220,370],[340,460],[180,555],[330,555]]) P(x,y);
+        M({kind:'spin',cx:260,cy:250,len:66,thick:5,ang:0,om:2.4,e:0.7});
+        M({kind:'spin',cx:260,cy:445,len:66,thick:5,ang:1,om:-2.4,e:0.7});
+        exitObstacles(M,{plateOm:3.0,punch:true,wind:1000});
+      }},
+    { name:'범퍼 아수라장', build:({P,M})=>{
+        const ys=[215,300,385,470];
+        ys.forEach((y,r)=>{ const xs=(r%2)? [140,250,360,450] : [95,205,315,425];
+          xs.forEach((x,i)=> M({kind:'bump',cx:x,cy:y,rad:12+((i+r)%3)*2,e:1.15,freq:1.8+((i*7+r*3)%10)*0.12})); });
+        M({kind:'spin',cx:180,cy:255,len:70,thick:5,ang:0,om:3.1,e:0.72});
+        M({kind:'spin',cx:340,cy:340,len:70,thick:5,ang:1,om:-3.3,e:0.72});
+        M({kind:'spin',cx:260,cy:520,len:90,thick:5,ang:.5,om:2.7,e:0.72});
+        for(const [x,y] of [[260,180],[120,180],[400,180]]) P(x,y);
+        exitObstacles(M,{plateOm:3.6,punch:true,wind:1300,plates:2});
+      }},
+  ];
+
+  // ================= 보드 빌드 =================
   function buildBoard(r){
-    segments=[];
+    segments=[]; pegs=[]; movers=[];
     const S=(x1,y1,x2,y2)=>segments.push({x1,y1,x2,y2});
+    const P=(x,y)=>pegs.push({x,y,r:5});
+    const M=(m)=>{ if(obstaclesOn) movers.push(m); };
     S(wallPad,60,wallPad,funnelTopY);
     S(W-wallPad,60,W-wallPad,funnelTopY);
     chuteHalf=Math.max(r*1.35*cfgChuteMul,18);
@@ -335,87 +376,52 @@
     S(W-wallPad,funnelTopY,crx,funnelBotY);
     S(clx,funnelBotY,clx,chuteBotY);
     S(crx,funnelBotY,crx,chuteBotY);
-
-    // 못
-    pegs=[]; const pr=5, gap=cfgPegGap; let row=0;
-    for(let y=150;y<=funnelTopY-40;y+=gap*0.85){
-      const off=(row%2)? gap/2:0;
-      for(let x=wallPad+34+off; x<=W-wallPad-30; x+=gap){ pegs.push({x,y,r:pr}); }
-      row++;
-    }
-
-    // 액티브 장애물
-    movers=[];
-    if(obstaclesOn){
-      // 회전 막대(스피너) — 필드 곳곳
-      movers.push({kind:'spin',cx:145,cy:245,len:82,thick:5,ang:0.3,om:2.6,e:0.7});
-      movers.push({kind:'spin',cx:375,cy:245,len:82,thick:5,ang:1.1,om:-3.0,e:0.7});
-      movers.push({kind:'spin',cx:260,cy:355,len:104,thick:5,ang:0.0,om:2.1,e:0.7});
-      movers.push({kind:'spin',cx:150,cy:470,len:78,thick:5,ang:0.6,om:-2.5,e:0.7});
-      movers.push({kind:'spin',cx:370,cy:470,len:78,thick:5,ang:0.9,om:2.9,e:0.7});
-      // 범퍼(정기적으로 펄스하며 밀어내는 원)
-      movers.push({kind:'bump',cx:260,cy:230,rad:16,e:1.15,freq:2.4});
-      movers.push({kind:'bump',cx:90, cy:400,rad:14,e:1.1, freq:1.9});
-      movers.push({kind:'bump',cx:430,cy:400,rad:14,e:1.1, freq:2.7});
-      // 출구 회전판 — 목구멍을 주기적으로 여닫음
-      movers.push({kind:'plate',cx:centerX,cy:funnelBotY-34,len:chuteHalf*2+34,thick:6,ang:0,om:3.4,e:0.65});
-      // 펀치 — 목구멍에서 위로 쳐올림
-      movers.push({kind:'punch',cx:centerX,y0:funnelBotY-58,amp:30,half:chuteHalf*0.9,thick:6,freq:3.1,e:0.95});
-      // 바람 — 출구 밴드에서 좌우로 흔들고 주기적으로 위로 밀어올림
-      movers.push({kind:'wind',x1:wallPad,x2:W-wallPad,y0:596,y1:696,amp:1200,freq:1.7,freq2:2.2});
-    }
+    (MAPS[curMap]||MAPS[0]).build({S,P,M,r,gap:cfgPegGap,chuteHalf});
   }
-
-  function radiusFor(n){
-    if(n<=10) return 14;
-    if(n<=20) return 11;
-    if(n<=32) return 9.5;
-    if(n<=50) return 8;
-    return 6.8;
+  function radiusFor(n){ return n<=10?14: n<=20?11: n<=32?9.5: n<=50?8: 6.8; }
+  function readCfg(){
+    cfgG=+$('pG').value; cfgChuteMul=+$('pC').value/100;
+    cfgBounce=+$('pB').value/100; cfgPegGap=74-(+$('pP').value)*7;
+    obstaclesOn=$('obsOn').checked;
+  }
+  function getNames(){
+    if(inputMode==='range'){ const n=Math.max(2,Math.min(40,+$('rangeN').value||0));
+      return Array.from({length:n},(_,i)=>(i+1)+'번'); }
+    return $('names').value.split('\n').map(s=>s.trim()).filter(Boolean);
   }
 
   // ================= setup =================
   function setup(){
     const names=getNames();
     if(names.length<2){ alert('참가자를 2명(조) 이상 입력하세요.'); return false;}
-    cfgG=+$('pG').value; cfgChuteMul=+$('pC').value/100;
-    cfgBounce=+$('pB').value/100; cfgPegGap=74-(+$('pP').value)*7;
-    obstaclesOn=$('obsOn').checked;
+    readCfg();
     timeLimit=+document.querySelector('#timeMode button.on').dataset.t;
-
     let per=Math.max(1,Math.min(5,+$('pBalls').value));
-    // 성능: 전체 공 80개 제한
     if(names.length*per>80) per=Math.max(1,Math.floor(80/names.length));
     totalBalls=names.length*per;
-
     const r=radiusFor(totalBalls);
     buildBoard(r);
-
     teams=names.map((nm,i)=>({name:nm,color:PALETTE[i%PALETTE.length],balls:[],firstFinish:Infinity}));
     balls=[];
-    // 스폰 슬롯(상단 격자, 위로 쌓기) — 섞어서 배치
     const cols=Math.max(1,Math.floor((W-2*wallPad-16)/(r*2+5)));
     const gapx=(W-2*wallPad-16)/cols;
-    let slot=0;
-    const order=[];
+    let slot=0; const order=[];
     teams.forEach((t,ti)=>{ for(let k=0;k<per;k++) order.push(ti); });
     for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
     order.forEach(ti=>{
       const c=slot%cols, rw=Math.floor(slot/cols);
       const x=wallPad+16+gapx*(c+0.5)+(Math.random()-0.5)*5;
       const y=20 - rw*(r*2+6);
-      const b={x,y,vx:(Math.random()-0.5)*30,vy:0,r,owner:ti,color:teams[ti].color,
-               finished:false,forder:-1,prevY:y};
+      const b={x,y,vx:(Math.random()-0.5)*30,vy:0,r,owner:ti,color:teams[ti].color,finished:false,forder:-1,prevY:y,trail:null};
       balls.push(b); teams[ti].balls.push(b); slot++;
     });
-
-    finishedOrder=[]; simTime=0; raceTime=0; settleTimer=0; frameCount=0;
-    drain=false; particles=[];
+    finishedOrder=[]; simTime=0; raceTime=0; settleTimer=0; frameCount=0; drain=false; particles=[];
+    camX=centerX; camY=200; camS=2.0;
     state='racing';
     return true;
   }
 
-  // ================= physics =================
+  // ================= 물리 =================
   const MAXV=1500;
   function closestOnSeg(px,py,s){
     const dx=s.x2-s.x1, dy=s.y2-s.y1, L2=dx*dx+dy*dy||1e-6;
@@ -425,55 +431,32 @@
   function collideMover(b,x1,y1,x2,y2,thick,sv,e){
     const c=closestOnSeg(b.x,b.y,{x1,y1,x2,y2});
     let nx=b.x-c.x, ny=b.y-c.y, d=Math.hypot(nx,ny); const rr=b.r+thick;
-    if(d<rr){
-      if(d<1e-4){nx=Math.random()-0.5;ny=-1;d=1;}
-      nx/=d; ny/=d;
+    if(d<rr){ if(d<1e-4){nx=Math.random()-0.5;ny=-1;d=1;} nx/=d;ny/=d;
       b.x+=nx*(rr-d); b.y+=ny*(rr-d);
-      const s=sv(c.x,c.y);
-      let rvx=b.vx-s.x, rvy=b.vy-s.y;
-      const vn=rvx*nx+rvy*ny;
+      const s=sv(c.x,c.y); let rvx=b.vx-s.x, rvy=b.vy-s.y; const vn=rvx*nx+rvy*ny;
       if(vn<0){ rvx-=(1+e)*vn*nx; rvy-=(1+e)*vn*ny; b.vx=s.x+rvx; b.vy=s.y+rvy;
-        if(Math.random()<0.35) spawnBurst(c.x,c.y,'#ffe38a',3,120); }
-    }
+        if(Math.random()<0.35) spawnBurst(c.x,c.y,'#ffe38a',3,120); } }
   }
-
   function step(dt){
     simTime+=dt;
-    // 움직이는 장애물 각도 갱신
     for(const m of movers){ if(m.kind==='spin'||m.kind==='plate') m.ang+=m.om*dt; }
-
-    // 적분
-    for(const b of balls){
-      if(b.finished) continue;
-      b.vy+=cfgG*dt;
-      if(drain) b.vy+=cfgG*1.3*dt;   // 막판 가속 낙하
+    for(const b of balls){ if(b.finished) continue;
+      b.vy+=cfgG*dt; if(drain) b.vy+=cfgG*1.3*dt;
       const sp=Math.hypot(b.vx,b.vy); if(sp>MAXV){ b.vx*=MAXV/sp; b.vy*=MAXV/sp; }
-      b.prevY=b.y; b.x+=b.vx*dt; b.y+=b.vy*dt;
-    }
-    // 벽 · 못
-    for(const b of balls){
-      if(b.finished) continue;
-      for(const s of segments){
-        const c=closestOnSeg(b.x,b.y,s);
+      b.prevY=b.y; b.x+=b.vx*dt; b.y+=b.vy*dt; }
+    for(const b of balls){ if(b.finished) continue;
+      for(const s of segments){ const c=closestOnSeg(b.x,b.y,s);
         let nx=b.x-c.x, ny=b.y-c.y, d=Math.hypot(nx,ny);
         if(d<b.r){ if(d<1e-4){nx=0;ny=-1;d=1;} nx/=d;ny/=d;
           b.x+=nx*(b.r-d); b.y+=ny*(b.r-d);
           const vn=b.vx*nx+b.vy*ny, wr=1+0.28*cfgBounce;
-          if(vn<0){ b.vx-=wr*vn*nx; b.vy-=wr*vn*ny; } b.vx*=0.999;
-        }
-      }
-      for(const p of pegs){
-        let nx=b.x-p.x, ny=b.y-p.y, d=Math.hypot(nx,ny); const rr=b.r+p.r;
+          if(vn<0){ b.vx-=wr*vn*nx; b.vy-=wr*vn*ny; } b.vx*=0.999; } }
+      for(const p of pegs){ let nx=b.x-p.x, ny=b.y-p.y, d=Math.hypot(nx,ny); const rr=b.r+p.r;
         if(d<rr){ if(d<1e-4){nx=Math.random()-0.5;ny=-1;d=1;} nx/=d;ny/=d;
           b.x+=nx*(rr-d); b.y+=ny*(rr-d);
           const vn=b.vx*nx+b.vy*ny, prr=1+0.5*cfgBounce;
-          if(vn<0){ b.vx-=prr*vn*nx; b.vy-=prr*vn*ny; }
-        }
-      }
-    }
-    // 액티브 장애물
-    for(const b of balls){
-      if(b.finished) continue;
+          if(vn<0){ b.vx-=prr*vn*nx; b.vy-=prr*vn*ny; } } } }
+    for(const b of balls){ if(b.finished) continue;
       for(const m of movers){
         if(m.kind==='spin'||m.kind==='plate'){
           const co=Math.cos(m.ang), si=Math.sin(m.ang);
@@ -489,163 +472,141 @@
           if(d<rr){ if(d<1e-4){nx=Math.random()-0.5;ny=-1;d=1;} nx/=d;ny/=d;
             b.x+=nx*(rr-d); b.y+=ny*(rr-d);
             const vn=b.vx*nx+b.vy*ny, e=1+m.e*cfgBounce*0.6;
-            if(vn<0){ b.vx-=e*vn*nx; b.vy-=e*vn*ny;
-              if(Math.random()<0.5) spawnBurst(b.x,b.y,'#c9b8ff',4,150); }
-          }
+            if(vn<0){ b.vx-=e*vn*nx; b.vy-=e*vn*ny; if(Math.random()<0.5) spawnBurst(b.x,b.y,'#c9b8ff',4,150); } }
         }else if(m.kind==='wind'){
           if(b.x>m.x1&&b.x<m.x2&&b.y>m.y0&&b.y<m.y1){
             b.vx += m.amp*Math.sin(m.freq*simTime + b.x*0.045)*dt;
-            if(!drain){ const up=Math.max(0,Math.sin(m.freq2*simTime));
-              b.vy -= cfgG*0.9*up*dt; }  // 주기적 상승 돌풍 → 될 듯 말 듯 (막판엔 끔)
-          }
+            if(!drain){ const up=Math.max(0,Math.sin(m.freq2*simTime)); b.vy -= cfgG*0.9*up*dt; } }
         }
-      }
-    }
-    // 공-공
-    for(let i=0;i<balls.length;i++){
-      const a=balls[i]; if(a.finished) continue;
-      for(let j=i+1;j<balls.length;j++){
-        const b=balls[j]; if(b.finished) continue;
+      } }
+    for(let i=0;i<balls.length;i++){ const a=balls[i]; if(a.finished) continue;
+      for(let j=i+1;j<balls.length;j++){ const b=balls[j]; if(b.finished) continue;
         let nx=b.x-a.x, ny=b.y-a.y, d=Math.hypot(nx,ny); const rr=a.r+b.r;
         if(d<rr){ if(d<1e-4){nx=Math.random()-0.5;ny=Math.random()-0.5;d=Math.hypot(nx,ny)||1;}
           nx/=d;ny/=d; const pen=(rr-d)*0.5;
           a.x-=nx*pen; a.y-=ny*pen; b.x+=nx*pen; b.y+=ny*pen;
           const rvx=b.vx-a.vx, rvy=b.vy-a.vy, vn=rvx*nx+rvy*ny;
-          if(vn<0){ const imp=(1+0.2)*vn/2; a.vx+=imp*nx; a.vy+=imp*ny; b.vx-=imp*nx; b.vy-=imp*ny; }
-        }
-      }
-    }
-    // 결승선
-    for(const b of balls){
-      if(b.finished) continue;
+          if(vn<0){ const imp=(1+0.2)*vn/2; a.vx+=imp*nx; a.vy+=imp*ny; b.vx-=imp*nx; b.vy-=imp*ny; } } } }
+    for(const b of balls){ if(b.finished) continue;
       if(b.prevY<finishY && b.y>=finishY){
         b.finished=true; b.forder=finishedOrder.length; finishedOrder.push(b);
         const t=teams[b.owner]; t.firstFinish=Math.min(t.firstFinish,b.forder);
-        spawnBurst(b.x,finishY,b.color,16,220);
-      }
-    }
+        spawnBurst(b.x,finishY,b.color,16,220); } }
   }
 
-  // ================= scoring =================
-  function teamProgress(t){
-    let s=0;
-    for(const b of t.balls){
-      if(b.finished) s+=3 + (1 - b.forder/Math.max(1,totalBalls));
-      else s+=Math.min(0.98,Math.max(0,b.y/finishY));
-    }
-    return s;
-  }
+  // ================= 점수 =================
+  function teamProgress(t){ let s=0;
+    for(const b of t.balls){ if(b.finished) s+=3+(1-b.forder/Math.max(1,totalBalls));
+      else s+=Math.min(0.98,Math.max(0,b.y/finishY)); } return s; }
   function teamArrived(t){ return t.balls.filter(b=>b.finished).length; }
   function rankedTeams(){
     return teams.map((t,i)=>({t,i,score:teamProgress(t),arr:teamArrived(t),first:t.firstFinish}))
       .sort((a,b)=> b.score-a.score || b.arr-a.arr || a.first-b.first || a.i-b.i);
   }
 
-  // ================= render =================
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    drawStars();
-    // 바람 밴드
-    if(obstaclesOn){
-      const wm=movers.find(m=>m.kind==='wind');
-      if(wm){ const up=Math.max(0,Math.sin(wm.freq2*simTime));
-        ctx.fillStyle=`rgba(93,140,255,${0.05+0.10*up})`;
-        ctx.fillRect(wm.x1,wm.y0,wm.x2-wm.x1,wm.y1-wm.y0);
-      }
-    }
-    // 결승선
-    ctx.strokeStyle='rgba(55,211,155,.6)'; ctx.setLineDash([6,6]); ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(centerX-chuteHalf,finishY); ctx.lineTo(centerX+chuteHalf,finishY); ctx.stroke();
-    ctx.setLineDash([]);
-    // 벽
-    ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle='#414a7d';
-    for(const s of segments){ ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke(); }
-    // 못
-    ctx.fillStyle='#5a6499';
-    for(const p of pegs){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
-    // 장애물 (네온 글로우)
-    ctx.lineCap='round';
+  // ================= 렌더 (메인/줌/미리보기 공용) =================
+  function renderScene(g){
+    drawStars(g);
+    const wm=movers.find(m=>m.kind==='wind');
+    if(wm){ const up=Math.max(0,Math.sin(wm.freq2*simTime));
+      g.fillStyle=`rgba(93,140,255,${0.05+0.10*up})`; g.fillRect(wm.x1,wm.y0,wm.x2-wm.x1,wm.y1-wm.y0); }
+    g.strokeStyle='rgba(55,211,155,.6)'; g.setLineDash([6,6]); g.lineWidth=2;
+    g.beginPath(); g.moveTo(centerX-chuteHalf,finishY); g.lineTo(centerX+chuteHalf,finishY); g.stroke(); g.setLineDash([]);
+    g.lineWidth=4; g.lineCap='round'; g.strokeStyle='#414a7d';
+    for(const s of segments){ g.beginPath(); g.moveTo(s.x1,s.y1); g.lineTo(s.x2,s.y2); g.stroke(); }
+    g.fillStyle='#5a6499';
+    for(const p of pegs){ g.beginPath(); g.arc(p.x,p.y,p.r,0,7); g.fill(); }
+    g.lineCap='round';
     for(const m of movers){
       if(m.kind==='spin'||m.kind==='plate'){
         const co=Math.cos(m.ang), si=Math.sin(m.ang), col=m.kind==='plate'?'#ff9f43':'#ffd54a';
-        ctx.shadowBlur=14; ctx.shadowColor=col; ctx.strokeStyle=col; ctx.lineWidth=m.thick*2;
-        ctx.beginPath(); ctx.moveTo(m.cx-co*m.len/2,m.cy-si*m.len/2); ctx.lineTo(m.cx+co*m.len/2,m.cy+si*m.len/2); ctx.stroke();
-        ctx.shadowBlur=0; ctx.fillStyle='#2b3358'; ctx.beginPath(); ctx.arc(m.cx,m.cy,4,0,7); ctx.fill();
+        g.shadowBlur=14; g.shadowColor=col; g.strokeStyle=col; g.lineWidth=m.thick*2;
+        g.beginPath(); g.moveTo(m.cx-co*m.len/2,m.cy-si*m.len/2); g.lineTo(m.cx+co*m.len/2,m.cy+si*m.len/2); g.stroke();
+        g.shadowBlur=0; g.fillStyle='#2b3358'; g.beginPath(); g.arc(m.cx,m.cy,4,0,7); g.fill();
       }else if(m.kind==='punch'){
         const yy=m.y0-m.amp*Math.max(0,Math.sin(m.freq*simTime));
-        ctx.shadowBlur=14; ctx.shadowColor='#ff5d8f'; ctx.strokeStyle='#ff5d8f'; ctx.lineWidth=m.thick*2;
-        ctx.beginPath(); ctx.moveTo(m.cx-m.half,yy); ctx.lineTo(m.cx+m.half,yy); ctx.stroke(); ctx.shadowBlur=0;
+        g.shadowBlur=14; g.shadowColor='#ff5d8f'; g.strokeStyle='#ff5d8f'; g.lineWidth=m.thick*2;
+        g.beginPath(); g.moveTo(m.cx-m.half,yy); g.lineTo(m.cx+m.half,yy); g.stroke(); g.shadowBlur=0;
       }else if(m.kind==='bump'){
         const puls=1+0.4*Math.max(0,Math.sin(m.freq*simTime));
-        ctx.shadowBlur=16; ctx.shadowColor='#a78bfa'; ctx.fillStyle='#7a5cff';
-        ctx.beginPath(); ctx.arc(m.cx,m.cy,m.rad*puls,0,7); ctx.fill(); ctx.shadowBlur=0;
-        ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(m.cx,m.cy,3,0,7); ctx.fill();
+        g.shadowBlur=16; g.shadowColor='#a78bfa'; g.fillStyle='#7a5cff';
+        g.beginPath(); g.arc(m.cx,m.cy,m.rad*puls,0,7); g.fill(); g.shadowBlur=0;
+        g.fillStyle='#fff'; g.beginPath(); g.arc(m.cx,m.cy,3,0,7); g.fill();
       }
     }
-    // 도착 트레이
-    finishedOrder.forEach((b,i)=>{
-      const sp=Math.min(2*b.r+2,(W-40)/Math.max(1,totalBalls));
-      const x=22+i*sp, y=trayY;
-      ctx.beginPath(); ctx.arc(x,y,Math.min(b.r,7),0,7); ctx.fillStyle=b.color; ctx.fill();
-    });
-    // 공 (미도착만 필드에) — 잔상 + 글로우
-    for(const b of balls){
-      if(b.finished) continue;
-      if(b.trail){ for(let i=0;i<b.trail.length;i++){ const tp=b.trail[i];
-        ctx.globalAlpha=0.06+0.10*i; ctx.fillStyle=b.color;
-        ctx.beginPath(); ctx.arc(tp.x,tp.y,b.r*(0.5+0.05*i),0,7); ctx.fill(); }
-        ctx.globalAlpha=1; }
-    }
-    for(const b of balls){
-      if(b.finished) continue;
-      ctx.shadowBlur=10; ctx.shadowColor=b.color;
-      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7); ctx.fillStyle=b.color; ctx.fill();
-      ctx.shadowBlur=0;
-      // 하이라이트
-      ctx.globalAlpha=.5; ctx.fillStyle='#fff';
-      ctx.beginPath(); ctx.arc(b.x-b.r*0.3,b.y-b.r*0.35,b.r*0.28,0,7); ctx.fill(); ctx.globalAlpha=1;
-      if(b.r>=9){
-        const nm=teams[b.owner].name;
-        const label=nm.length>3?nm.slice(0,3):nm;
-        ctx.fillStyle='rgba(0,0,0,.6)'; ctx.font=`800 ${Math.max(8,b.r*0.72)}px sans-serif`;
-        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(label,b.x,b.y);
-      }
-    }
-    drawParticles();
+    finishedOrder.forEach((b,i)=>{ const sp=Math.min(2*b.r+2,(W-40)/Math.max(1,totalBalls));
+      g.beginPath(); g.arc(22+i*sp,trayY,Math.min(b.r,7),0,7); g.fillStyle=b.color; g.fill(); });
+    for(const b of balls){ if(b.finished||!b.trail) continue;
+      for(let i=0;i<b.trail.length;i++){ const tp=b.trail[i];
+        g.globalAlpha=0.06+0.10*i; g.fillStyle=b.color;
+        g.beginPath(); g.arc(tp.x,tp.y,b.r*(0.5+0.05*i),0,7); g.fill(); } g.globalAlpha=1; }
+    for(const b of balls){ if(b.finished) continue;
+      g.shadowBlur=10; g.shadowColor=b.color;
+      g.beginPath(); g.arc(b.x,b.y,b.r,0,7); g.fillStyle=b.color; g.fill(); g.shadowBlur=0;
+      g.globalAlpha=.5; g.fillStyle='#fff';
+      g.beginPath(); g.arc(b.x-b.r*0.3,b.y-b.r*0.35,b.r*0.28,0,7); g.fill(); g.globalAlpha=1;
+      if(b.r>=9){ const nm=teams[b.owner].name, label=nm.length>3?nm.slice(0,3):nm;
+        g.fillStyle='rgba(0,0,0,.6)'; g.font=`800 ${Math.max(8,b.r*0.72)}px sans-serif`;
+        g.textAlign='center'; g.textBaseline='middle'; g.fillText(label,b.x,b.y); } }
+    drawParticles(g);
   }
 
-  // ================= scoreboard / result =================
+  function drawMain(){ ctx.clearRect(0,0,W,H); renderScene(ctx); }
+
+  function drawZoom(){
+    const alive=balls.filter(b=>!b.finished);
+    let tx=centerX, ty=340, ts=2.0, label='🔍 접전 확대';
+    if(alive.length){
+      alive.sort((a,b)=>b.y-a.y);
+      const k=Math.min(5,alive.length); let sx=0,sy=0;
+      for(let i=0;i<k;i++){ sx+=alive[i].x; sy+=alive[i].y; }
+      tx=sx/k; ty=sy/k;
+      if(alive.length<=2){ ts=3.4; label='🔥 마지막 승부'; }
+      else if(alive.length<=5){ ts=2.9; label='⚡ 접전 지역'; }
+      else ts=2.3;
+    }else{ tx=centerX; ty=finishY-20; ts=2.4; label='🏁 결승선'; }
+    camX+=(tx-camX)*0.09; camY+=(ty-camY)*0.09; camS+=(ts-camS)*0.05;
+    const hw=ZW/2/camS, hh=ZH/2/camS;
+    const cx = (hw*2>=W)? centerX : Math.max(hw,Math.min(W-hw,camX));
+    const cy = (hh*2>=H)? H/2     : Math.max(hh,Math.min(H-hh,camY));
+    zctx.setTransform(1,0,0,1,0,0); zctx.clearRect(0,0,ZW,ZH);
+    zctx.fillStyle='#0d1024'; zctx.fillRect(0,0,ZW,ZH);
+    zctx.save(); zctx.setTransform(camS,0,0,camS, ZW/2-cx*camS, ZH/2-cy*camS);
+    renderScene(zctx); zctx.restore();
+    const zl=$('zlabel'); if(zl.textContent!==label) zl.textContent=label;
+  }
+
+  function drawPreview(){
+    readCfg(); buildBoard(12);
+    const s=PW/W;
+    pctx.setTransform(1,0,0,1,0,0); pctx.clearRect(0,0,PW,PH);
+    pctx.fillStyle='#10132a'; pctx.fillRect(0,0,PW,PH);
+    pctx.save(); pctx.setTransform(s,0,0,s,0,0); renderScene(pctx); pctx.restore();
+  }
+
+  // ================= 순위판 =================
   function updateBoard(final){
-    const rk=rankedTeams();
-    const box=$('board');
+    const rk=rankedTeams(); const box=$('board');
     const count=Math.max(1,Math.min(rk.length,+$('pickCount').value||1));
     let win=new Set(), lose=new Set();
     if(pickMode==='first') rk.slice(0,count).forEach(x=>win.add(x.i));
     else if(pickMode==='last') rk.slice(-count).forEach(x=>lose.add(x.i));
     let html='<ol>';
-    rk.forEach((x,idx)=>{
-      const cls=win.has(x.i)?'win':lose.has(x.i)?'lose':'';
+    rk.forEach((x,idx)=>{ const cls=win.has(x.i)?'win':lose.has(x.i)?'lose':'';
       html+=`<li class="${cls}"><span class="rk">${idx+1}</span>`+
             `<span class="dot" style="background:${x.t.color}"></span>`+
             `<span class="nm">${escapeHtml(x.t.name)}</span>`+
-            `<span class="ct">${x.arr}/${x.t.balls.length}</span></li>`;
-    });
-    html+='</ol>';
-    box.innerHTML=html;
-
-    if(final){
-      const banner=$('banner'); const ttl=$('title').value.trim();
-      const pre=ttl?ttl+' — ':'';
+            `<span class="ct">${x.arr}/${x.t.balls.length}</span></li>`; });
+    box.innerHTML=html+'</ol>';
+    if(final){ const banner=$('banner'); const ttl=$('title').value.trim(); const pre=ttl?ttl+' — ':'';
       if(pickMode==='first') banner.textContent='🏆 '+pre+rk.slice(0,count).map(x=>x.t.name).join(', ');
       else if(pickMode==='last') banner.textContent='🎯 '+pre+rk.slice(-count).map(x=>x.t.name).join(', ')+' (당번)';
       else banner.textContent='🏁 '+pre+'순서 결정!';
-      banner.classList.add('show');
-      setTimeout(()=>banner.classList.remove('show'),4000);
-    }
+      banner.classList.add('show'); setTimeout(()=>banner.classList.remove('show'),4200); }
   }
   function escapeHtml(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 
-  // ================= loop =================
+  // ================= 루프 =================
   function frame(){
     if(state!=='racing') return;
     const sub=6, dt=(1/60)/sub;
@@ -653,86 +614,91 @@
     raceTime+=1/60; frameCount++;
     for(const b of balls){ if(b.finished) continue; (b.trail||(b.trail=[])).push({x:b.x,y:b.y}); if(b.trail.length>6) b.trail.shift(); }
     updateParticles(1/60);
-    draw();
+    drawMain(); drawZoom();
     if(frameCount%4===0) updateBoard(false);
-
-    // 시계
     if(timeLimit>0){
-      const left=Math.max(0,timeLimit-raceTime);
-      const cl=$('clock'); cl.textContent='⏱ '+left.toFixed(1);
-      cl.classList.toggle('warn',left<=5);
+      const left=Math.max(0,timeLimit-raceTime); const cl=$('clock');
+      cl.textContent='⏱ '+left.toFixed(1); cl.classList.toggle('warn',left<=5);
       $('toolbar').textContent=`도착 ${finishedOrder.length}/${totalBalls}`;
       if(left<=0){ endRace('⏱ 시간 종료!'); return; }
-    }else{
-      $('clock').textContent='';
-      $('toolbar').textContent=`도착 ${finishedOrder.length}/${totalBalls}`;
-    }
-
+    }else{ $('clock').textContent=''; $('toolbar').textContent=`도착 ${finishedOrder.length}/${totalBalls}`; }
     const remaining=balls.filter(b=>!b.finished).length;
     if(remaining===0){ endRace(); return; }
-    // 안전장치(제한시간 없을 때): 일정 시간 후 남은 공 가속 낙하 → 빠르게 마무리
     if(timeLimit===0){
       if(raceTime>22) drain=true;
       if(remaining<=Math.max(2,totalBalls*0.1)){
         const stuck=balls.filter(b=>!b.finished).every(b=>Math.hypot(b.vx,b.vy)<25);
-        if(stuck){ if(++settleTimer>90){ endRace(); return; } } else settleTimer=0;
-      }
+        if(stuck){ if(++settleTimer>90){ endRace(); return; } } else settleTimer=0; }
       if(raceTime>50){ endRace(); return; }
     }
     raf=requestAnimationFrame(frame);
   }
-
   function endRace(msg){
     state='done'; updateBoard(true);
     $('toolbar').textContent=msg||'완료!';
-    $('startBtn').disabled=false;
-    // 우승 컨페티 폭죽
-    const rk=rankedTeams();
-    const cnt=Math.max(1,Math.min(rk.length,+$('pickCount').value||1));
+    const rk=rankedTeams(); const cnt=Math.max(1,Math.min(rk.length,+$('pickCount').value||1));
     const hl=(pickMode==='last'? rk.slice(-cnt):rk.slice(0,cnt)).map(x=>x.t.color);
     shower(hl.length?hl:PALETTE.slice(0,6));
     celebrate();
   }
-  function celebrate(){
-    if(state!=='done') return;
-    updateParticles(1/60); draw();
-    if(particles.length>0) requestAnimationFrame(celebrate);
-  }
+  function celebrate(){ if(state!=='done') return; updateParticles(1/60); drawMain(); drawZoom();
+    if(particles.length>0) requestAnimationFrame(celebrate); }
 
-  // ================= controls =================
-  $('startBtn').onclick=()=>{
-    if(state==='racing') return;
+  // ================= 화면 전환 · 컨트롤 =================
+  function runRace(){
     cancelAnimationFrame(raf); $('banner').classList.remove('show');
-    if(!setup()) return;
-    $('startBtn').disabled=true;
-    raf=requestAnimationFrame(frame);
-  };
-  $('resetBtn').onclick=()=>{
-    cancelAnimationFrame(raf); state='idle'; balls=[]; teams=[]; finishedOrder=[];
-    obstaclesOn=$('obsOn').checked; particles=[]; buildBoard(12); drawIdle(); idleTwinkle();
-    $('board').innerHTML='<div class="empty">참가자를 입력하고 시작하세요.</div>';
-    $('toolbar').textContent='대기 중'; $('clock').textContent='';
-    $('startBtn').disabled=false;
-  };
-
-  function drawIdle(){
-    ctx.clearRect(0,0,W,H);
-    drawStars();
-    ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle='#414a7d';
-    for(const s of segments){ ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke(); }
-    ctx.fillStyle='#5a6499';
-    for(const p of pegs){ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); }
-    for(const m of movers){
-      if(m.kind==='spin'||m.kind==='plate'){ ctx.strokeStyle=m.kind==='plate'?'#ff9f43':'#ffcb45'; ctx.lineWidth=m.thick*2;
-        ctx.beginPath(); ctx.moveTo(m.cx-m.len/2,m.cy); ctx.lineTo(m.cx+m.len/2,m.cy); ctx.stroke(); }
-      else if(m.kind==='bump'){ ctx.fillStyle='#7a5cff'; ctx.beginPath(); ctx.arc(m.cx,m.cy,m.rad,0,7); ctx.fill(); }
-    }
-    ctx.fillStyle='#5a6499'; ctx.font='16px sans-serif'; ctx.textAlign='center';
-    ctx.fillText('참가자를 입력하고 시작을 누르세요',centerX,300);
+    if(!setup()) return false;
+    raf=requestAnimationFrame(frame); return true;
   }
+  function showGame(){
+    const ttl=$('title').value.trim();
+    $('gtitle').textContent = ttl || ((MAPS[curMap]&&MAPS[curMap].name)? '구슬 낙하 뽑기 · '+MAPS[curMap].name : '구슬 낙하 뽑기');
+    $('setup').hidden=true; $('game').hidden=false;
+  }
+  function showSetup(){ cancelAnimationFrame(raf); state='idle'; $('game').hidden=true; $('setup').hidden=false; drawPreview(); }
 
-  initStars(); obstaclesOn=$('obsOn').checked; buildBoard(12); drawIdle(); idleTwinkle();
-  function idleTwinkle(){ if(state!=='idle') return; simTime+=1/60; drawIdle(); requestAnimationFrame(idleTwinkle); }
+  $('startBtn').onclick=()=>{ if(runRace()) showGame(); };
+  $('replayBtn').onclick=()=>{ runRace(); };
+  $('backBtn').onclick=()=>{ showSetup(); };
+
+  // ================= 설정 UI 배선 =================
+  document.querySelectorAll('#inputMode button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#inputMode button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); inputMode=b.dataset.m;
+    $('namesBox').style.display=inputMode==='names'?'block':'none';
+    $('rangeBox').style.display=inputMode==='range'?'block':'none';
+  });
+  document.querySelectorAll('#pickMode button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#pickMode button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); pickMode=b.dataset.p;
+    $('pickHint').innerHTML = pickMode==='order' ? '도착 순서대로 전체 순위를 매겨요.'
+      : pickMode==='first' ? '먼저 도착 = 1등 (발표자·순번)'
+      : '오래 남거나 가장 위 = 꼴등 (당번). <b>제한 시간</b>과 함께 쓰세요!';
+  });
+  document.querySelectorAll('#timeMode button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#timeMode button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  });
+  document.querySelectorAll('#mapSel button').forEach(b=>b.onclick=()=>{
+    document.querySelectorAll('#mapSel button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); curMap=+b.dataset.map; drawPreview();
+  });
+  document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>{
+    const n=b.dataset.n;
+    if(n==='예시'){ $('names').value='김하나\n이두리\n박세라\n최네오\n정오름\n한여섯'; return;}
+    if(n==='조5'){ $('names').value='1조\n2조\n3조\n4조\n5조'; return;}
+    const arr=[]; for(let i=1;i<=+n;i++) arr.push(i+'번'); $('names').value=arr.join('\n');
+  });
+  const sliderLabels={ pBalls:v=>v+'개',
+    pG:v=> v<950?'느림': v<1500?'보통':'빠름', pC:v=> v<90?'좁음': v<130?'보통':'넓음',
+    pB:v=> v<80?'약함': v<115?'보통':'강함', pP:v=> v<=2?'듬성': v==3?'보통':'촘촘' };
+  ['pBalls','pG','pC','pB','pP'].forEach(id=>{ const el=$(id), vid='v'+id.slice(1);
+    const upd=()=>$(vid).textContent=sliderLabels[id](+el.value); el.oninput=upd; upd(); });
+  // 미리보기에 영향 주는 항목 변경 시 갱신
+  ['pC','pP'].forEach(id=>$(id).addEventListener('input',drawPreview));
+  $('obsOn').addEventListener('change',drawPreview);
+
+  // 시작
+  initStars(); curMap=1; drawPreview();
 })();
 </script>
 </body>
