@@ -117,6 +117,36 @@
   .toolbar{position:absolute;top:10px;left:10px;font-size:12px;color:var(--muted);
            background:rgba(0,0,0,.35);border-radius:8px;padding:4px 8px}
 
+  /* ---------- 결과 팝업 ---------- */
+  .rmodal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+          background:rgba(6,8,18,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding:16px}
+  .rmodal[hidden]{display:none}
+  .rcard{width:100%;max-width:390px;background:linear-gradient(#1b2138,#141830);
+         border-radius:22px;padding:24px 22px;text-align:center;
+         box-shadow:0 0 0 1px rgba(255,203,69,.45),0 0 60px rgba(255,203,69,.28),0 30px 90px rgba(0,0,0,.65);
+         animation:bigpop .6s cubic-bezier(.18,1.6,.4,1)}
+  @keyframes bigpop{0%{transform:scale(.15) rotate(-10deg);opacity:0}
+                    55%{transform:scale(1.12) rotate(3deg);opacity:1}
+                    75%{transform:scale(.97) rotate(-1deg)}100%{transform:scale(1) rotate(0)}}
+  .rhead{font-size:15px;font-weight:800;color:var(--muted);letter-spacing:.5px}
+  .rwin{font-size:30px;font-weight:900;line-height:1.2;margin:6px 4px 16px;word-break:keep-all;
+        background:linear-gradient(90deg,#ffcb45,#ff9f43,#ff5d8f,#ffcb45);background-size:200% 100%;
+        -webkit-background-clip:text;background-clip:text;color:transparent;
+        filter:drop-shadow(0 2px 16px rgba(255,203,69,.4));animation:shine 3s linear infinite}
+  .rwin.order{font-size:24px}
+  .rlist{list-style:none;margin:0 0 18px;padding:0;max-height:210px;overflow:auto;text-align:left}
+  .rlist li{display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:9px;margin-bottom:5px;
+            background:var(--panel2);font-size:14px}
+  .rlist li .rk{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+                font-size:12px;font-weight:800;color:#0f1220;background:var(--muted);flex:0 0 auto}
+  .rlist li .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rlist li .ct{font-size:12px;color:var(--muted);flex:0 0 auto}
+  .rlist li.win{background:linear-gradient(90deg,rgba(255,203,69,.2),transparent);border:1px solid var(--gold)}
+  .rlist li.lose{background:linear-gradient(90deg,rgba(255,93,143,.18),transparent);border:1px solid var(--pink)}
+  .rbtns{display:flex;gap:10px}
+  .rbtns .btn{flex:1;font-size:15px;padding:13px}
+  .rbtns .gbtn{flex:0 0 auto}
+
   @media(max-width:820px){
     .gamewrap{flex-direction:column}
     .stage{flex:0 0 auto;align-self:center;width:100%;max-width:440px}
@@ -243,6 +273,19 @@
             <div class="board" id="board"></div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 결과 팝업 ================= -->
+  <div id="resultModal" class="rmodal" hidden>
+    <div class="rcard">
+      <div class="rhead" id="rHead">결과</div>
+      <div class="rwin" id="rWin"></div>
+      <ol class="rlist" id="rList"></ol>
+      <div class="rbtns">
+        <button class="btn go" id="rReplay">⟳ 다시 하기</button>
+        <button class="gbtn" id="rClose">✕ 닫기</button>
       </div>
     </div>
   </div>
@@ -545,9 +588,12 @@
       g.beginPath(); g.arc(b.x,b.y,b.r,0,7); g.fillStyle=b.color; g.fill(); g.shadowBlur=0;
       g.globalAlpha=.5; g.fillStyle='#fff';
       g.beginPath(); g.arc(b.x-b.r*0.3,b.y-b.r*0.35,b.r*0.28,0,7); g.fill(); g.globalAlpha=1;
-      if(b.r>=9){ const nm=teams[b.owner].name, label=nm.length>3?nm.slice(0,3):nm;
-        g.fillStyle='rgba(0,0,0,.6)'; g.font=`800 ${Math.max(8,b.r*0.72)}px sans-serif`;
-        g.textAlign='center'; g.textBaseline='middle'; g.fillText(label,b.x,b.y); } }
+      // 이름·숫자 라벨 (모든 공, 흰 글씨 + 검은 외곽선으로 어떤 색에서도 또렷)
+      const nm=teams[b.owner].name, label=nm.length>3?nm.slice(0,3):nm;
+      g.font=`800 ${Math.max(7.5,b.r*0.82)}px sans-serif`;
+      g.textAlign='center'; g.textBaseline='middle';
+      g.lineJoin='round'; g.lineWidth=Math.max(2,b.r*0.28); g.strokeStyle='rgba(0,0,0,.7)';
+      g.strokeText(label,b.x,b.y); g.fillStyle='#fff'; g.fillText(label,b.x,b.y); }
     drawParticles(g);
   }
 
@@ -606,6 +652,31 @@
   }
   function escapeHtml(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 
+  function showResultModal(){
+    const rk=rankedTeams();
+    const count=Math.max(1,Math.min(rk.length,+$('pickCount').value||1));
+    const ttl=$('title').value.trim();
+    let win=new Set(), lose=new Set(), head, winTxt, orderMode=false;
+    if(pickMode==='first'){ head='🏆 '+(ttl||'1등 당첨'); winTxt=rk.slice(0,count).map(x=>x.t.name).join(', ');
+      rk.slice(0,count).forEach(x=>win.add(x.i)); }
+    else if(pickMode==='last'){ head='🎯 '+(ttl||'당번 당첨'); winTxt=rk.slice(-count).map(x=>x.t.name).join(', ');
+      rk.slice(-count).forEach(x=>lose.add(x.i)); }
+    else { head='🏁 '+(ttl||'최종 순위'); winTxt='1등 '+(rk[0]?rk[0].t.name:''); orderMode=true; }
+    $('rHead').textContent=head;
+    const rw=$('rWin'); rw.textContent=winTxt; rw.classList.toggle('order',orderMode);
+    const medal=['#ffcb45','#d7dee8','#e0955b'];
+    let html='';
+    rk.forEach((x,idx)=>{ const cls=win.has(x.i)?'win':lose.has(x.i)?'lose':'';
+      const bg=idx<3?medal[idx]:'var(--muted)';
+      html+=`<li class="${cls}"><span class="rk" style="background:${bg}">${idx+1}</span>`+
+            `<span class="dot" style="background:${x.t.color}"></span>`+
+            `<span class="nm">${escapeHtml(x.t.name)}</span>`+
+            `<span class="ct">${x.arr}/${x.t.balls.length}</span></li>`; });
+    $('rList').innerHTML=html;
+    const m=$('resultModal'); m.hidden=false;
+    const c=m.querySelector('.rcard'); c.style.animation='none'; void c.offsetWidth; c.style.animation='';
+  }
+
   // ================= 루프 =================
   function frame(){
     if(state!=='racing') return;
@@ -640,13 +711,14 @@
     const hl=(pickMode==='last'? rk.slice(-cnt):rk.slice(0,cnt)).map(x=>x.t.color);
     shower(hl.length?hl:PALETTE.slice(0,6));
     celebrate();
+    setTimeout(showResultModal,600);   // 컨페티 한 박자 뒤 팝업 "빵!"
   }
   function celebrate(){ if(state!=='done') return; updateParticles(1/60); drawMain(); drawZoom();
     if(particles.length>0) requestAnimationFrame(celebrate); }
 
   // ================= 화면 전환 · 컨트롤 =================
   function runRace(){
-    cancelAnimationFrame(raf); $('banner').classList.remove('show');
+    cancelAnimationFrame(raf); $('banner').classList.remove('show'); $('resultModal').hidden=true;
     if(!setup()) return false;
     raf=requestAnimationFrame(frame); return true;
   }
@@ -655,11 +727,13 @@
     $('gtitle').textContent = ttl || ((MAPS[curMap]&&MAPS[curMap].name)? '구슬 낙하 뽑기 · '+MAPS[curMap].name : '구슬 낙하 뽑기');
     $('setup').hidden=true; $('game').hidden=false;
   }
-  function showSetup(){ cancelAnimationFrame(raf); state='idle'; $('game').hidden=true; $('setup').hidden=false; drawPreview(); }
+  function showSetup(){ cancelAnimationFrame(raf); state='idle'; $('resultModal').hidden=true; $('game').hidden=true; $('setup').hidden=false; drawPreview(); }
 
   $('startBtn').onclick=()=>{ if(runRace()) showGame(); };
   $('replayBtn').onclick=()=>{ runRace(); };
   $('backBtn').onclick=()=>{ showSetup(); };
+  $('rReplay').onclick=()=>{ runRace(); };
+  $('rClose').onclick=()=>{ $('resultModal').hidden=true; };
 
   // ================= 설정 UI 배선 =================
   document.querySelectorAll('#inputMode button').forEach(b=>b.onclick=()=>{
